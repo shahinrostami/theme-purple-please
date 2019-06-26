@@ -2,7 +2,7 @@
 
 A JupyterLab theme extension which provides the Purple Please theme, inspired by the Shades of Purple theme from VSCode.
 
-![Screenshot of Purple Please in action](screenshot.jpg)
+![Screenshot of Purple Please in action](screenshot.png)
 
 ## Prerequisites
 
