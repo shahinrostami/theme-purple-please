@@ -1,6 +1,6 @@
 # @shahinrostami/theme-purple-please
 
-A JupyterLab theme extension which provides the Purple Please theme, inspired by the Shades of Purple theme from VSCode.
+A JupyterLab theme extension which provides the Purple Please theme, inspired by the [shades-of-purple](https://github.com/ahmadawais/shades-of-purple-vscode) theme for VSCode.
 
 ![Screenshot of Purple Please in action](screenshot.png)
 
