@@ -1,0 +1,38 @@
+{
+  "name": "comment-json",
+  "version": "1.1.3",
+  "description": "Parse and stringify JSON file with comments",
+  "main": "index.js",
+  "scripts": {
+    "test": "./node_modules/.bin/mocha --reporter spec ./test/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/kaelzhang/node-comment-json.git"
+  },
+  "keywords": [
+    "comment-json",
+    "comments",
+    "annotations",
+    "json",
+    "json-stringify",
+    "json-parse",
+    "parser"
+  ],
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "author": "kael",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kaelzhang/node-comment-json/issues"
+  },
+  "devDependencies": {
+    "chai": "*",
+    "mocha": "*",
+    "test-fixture": "^1.0.2"
+  },
+  "dependencies": {
+    "json-parser": "^1.0.0"
+  }
+}

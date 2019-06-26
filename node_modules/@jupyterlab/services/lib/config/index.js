@@ -1,0 +1,156 @@
+"use strict";
+// Copyright (c) Jupyter Development Team.
+// Distributed under the terms of the Modified BSD License.
+Object.defineProperty(exports, "__esModule", { value: true });
+const coreutils_1 = require("@jupyterlab/coreutils");
+const __1 = require("..");
+/**
+ * The url for the config service.
+ */
+let SERVICE_CONFIG_URL = 'api/config';
+/**
+ * The namespace for ConfigSection statics.
+ */
+var ConfigSection;
+(function (ConfigSection) {
+    /**
+     * Create a config section.
+     *
+     * @returns A Promise that is fulfilled with the config section is loaded.
+     */
+    function create(options) {
+        let section = new DefaultConfigSection(options);
+        return section.load().then(() => {
+            return section;
+        });
+    }
+    ConfigSection.create = create;
+})(ConfigSection = exports.ConfigSection || (exports.ConfigSection = {}));
+/**
+ * Implementation of the Configurable data section.
+ */
+class DefaultConfigSection {
+    /**
+     * Construct a new config section.
+     */
+    constructor(options) {
+        this._url = 'unknown';
+        let settings = (this.serverSettings =
+            options.serverSettings || __1.ServerConnection.makeSettings());
+        this._url = coreutils_1.URLExt.join(settings.baseUrl, SERVICE_CONFIG_URL, encodeURIComponent(options.name));
+    }
+    /**
+     * Get the data for this section.
+     */
+    get data() {
+        return this._data;
+    }
+    /**
+     * Load the initial data for this section.
+     *
+     * #### Notes
+     * Uses the [Jupyter Notebook API](http://petstore.swagger.io/?url=https://raw.githubusercontent.com/jupyter/notebook/master/notebook/services/api/api.yaml#!/config).
+     *
+     * The promise is fulfilled on a valid response and rejected otherwise.
+     */
+    load() {
+        return __1.ServerConnection.makeRequest(this._url, {}, this.serverSettings)
+            .then(response => {
+            if (response.status !== 200) {
+                throw new __1.ServerConnection.ResponseError(response);
+            }
+            return response.json();
+        })
+            .then(data => {
+            this._data = data;
+        });
+    }
+    /**
+     * Modify the stored config values.
+     *
+     * #### Notes
+     * Uses the [Jupyter Notebook API](http://petstore.swagger.io/?url=https://raw.githubusercontent.com/jupyter/notebook/master/notebook/services/api/api.yaml#!/config).
+     *
+     * The promise is fulfilled on a valid response and rejected otherwise.
+     *
+     * Updates the local data immediately, sends the change to the server,
+     * and updates the local data with the response, and fulfils the promise
+     * with that data.
+     */
+    update(newdata) {
+        this._data = Object.assign({}, this._data, newdata);
+        let init = {
+            method: 'PATCH',
+            body: JSON.stringify(newdata)
+        };
+        return __1.ServerConnection.makeRequest(this._url, init, this.serverSettings)
+            .then(response => {
+            if (response.status !== 200) {
+                throw new __1.ServerConnection.ResponseError(response);
+            }
+            return response.json();
+        })
+            .then(data => {
+            this._data = data;
+            return this._data;
+        });
+    }
+}
+/**
+ * Configurable object with defaults.
+ */
+class ConfigWithDefaults {
+    /**
+     * Create a new config with defaults.
+     */
+    constructor(options) {
+        this._className = '';
+        this._section = options.section;
+        this._defaults = options.defaults || {};
+        this._className = options.className || '';
+    }
+    /**
+     * Get data from the config section or fall back to defaults.
+     */
+    get(key) {
+        let data = this._classData();
+        return key in data ? data[key] : this._defaults[key];
+    }
+    /**
+     * Set a config value.
+     *
+     * #### Notes
+     * Uses the [Jupyter Notebook API](http://petstore.swagger.io/?url=https://raw.githubusercontent.com/jupyter/notebook/master/notebook/services/api/api.yaml#!/config).
+     *
+     * The promise is fulfilled on a valid response and rejected otherwise.
+     *
+     * Sends the update to the server, and changes our local copy of the data
+     * immediately.
+     */
+    set(key, value) {
+        let d = {};
+        d[key] = value;
+        if (this._className) {
+            let d2 = {};
+            d2[this._className] = d;
+            return this._section.update(d2);
+        }
+        else {
+            return this._section.update(d);
+        }
+    }
+    /**
+     * Get data from the Section with our classname, if available.
+     *
+     * #### Notes
+     * If we have no classname, get all of the data in the Section
+     */
+    _classData() {
+        let data = this._section.data;
+        if (this._className && this._className in data) {
+            return data[this._className];
+        }
+        return data;
+    }
+}
+exports.ConfigWithDefaults = ConfigWithDefaults;

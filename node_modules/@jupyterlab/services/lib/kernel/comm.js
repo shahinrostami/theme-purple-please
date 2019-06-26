@@ -1,0 +1,165 @@
+"use strict";
+// Copyright (c) Jupyter Development Team.
+// Distributed under the terms of the Modified BSD License.
+Object.defineProperty(exports, "__esModule", { value: true });
+const disposable_1 = require("@phosphor/disposable");
+const messages_1 = require("./messages");
+/**
+ * Comm channel handler.
+ */
+class CommHandler extends disposable_1.DisposableDelegate {
+    /**
+     * Construct a new comm channel.
+     */
+    constructor(target, id, kernel, disposeCb) {
+        super(disposeCb);
+        this._target = '';
+        this._id = '';
+        this._id = id;
+        this._target = target;
+        this._kernel = kernel;
+    }
+    /**
+     * The unique id for the comm channel.
+     */
+    get commId() {
+        return this._id;
+    }
+    /**
+     * The target name for the comm channel.
+     */
+    get targetName() {
+        return this._target;
+    }
+    /**
+     * Get the callback for a comm close event.
+     *
+     * #### Notes
+     * This is called when the comm is closed from either the server or client.
+     *
+     * **See also:** [[ICommClose]], [[close]]
+     */
+    get onClose() {
+        return this._onClose;
+    }
+    /**
+     * Set the callback for a comm close event.
+     *
+     * #### Notes
+     * This is called when the comm is closed from either the server or client. If
+     * the function returns a promise, and the kernel was closed from the server,
+     * kernel message processing will pause until the returned promise is
+     * fulfilled.
+     *
+     * **See also:** [[close]]
+     */
+    set onClose(cb) {
+        this._onClose = cb;
+    }
+    /**
+     * Get the callback for a comm message received event.
+     */
+    get onMsg() {
+        return this._onMsg;
+    }
+    /**
+     * Set the callback for a comm message received event.
+     *
+     * #### Notes
+     * This is called when a comm message is received. If the function returns a
+     * promise, kernel message processing will pause until it is fulfilled.
+     */
+    set onMsg(cb) {
+        this._onMsg = cb;
+    }
+    /**
+     * Open a comm with optional data and metadata.
+     *
+     * #### Notes
+     * This sends a `comm_open` message to the server.
+     *
+     * **See also:** [[ICommOpen]]
+     */
+    open(data, metadata, buffers = []) {
+        if (this.isDisposed || this._kernel.isDisposed) {
+            throw new Error('Cannot open');
+        }
+        let options = {
+            msgType: 'comm_open',
+            channel: 'shell',
+            username: this._kernel.username,
+            session: this._kernel.clientId
+        };
+        let content = {
+            comm_id: this._id,
+            target_name: this._target,
+            data: data || {}
+        };
+        let msg = messages_1.KernelMessage.createShellMessage(options, content, metadata, buffers);
+        return this._kernel.sendShellMessage(msg, false, true);
+    }
+    /**
+     * Send a `comm_msg` message to the kernel.
+     *
+     * #### Notes
+     * This is a no-op if the comm has been closed.
+     *
+     * **See also:** [[ICommMsg]]
+     */
+    send(data, metadata, buffers = [], disposeOnDone = true) {
+        if (this.isDisposed || this._kernel.isDisposed) {
+            throw new Error('Cannot send');
+        }
+        let options = {
+            msgType: 'comm_msg',
+            channel: 'shell',
+            username: this._kernel.username,
+            session: this._kernel.clientId
+        };
+        let content = {
+            comm_id: this._id,
+            data: data
+        };
+        let msg = messages_1.KernelMessage.createShellMessage(options, content, metadata, buffers);
+        return this._kernel.sendShellMessage(msg, false, true);
+    }
+    /**
+     * Close the comm.
+     *
+     * #### Notes
+     * This will send a `comm_close` message to the kernel, and call the
+     * `onClose` callback if set.
+     *
+     * This is a no-op if the comm is already closed.
+     *
+     * **See also:** [[ICommClose]], [[onClose]]
+     */
+    close(data, metadata, buffers = []) {
+        if (this.isDisposed || this._kernel.isDisposed) {
+            throw new Error('Cannot close');
+        }
+        let options = {
+            msgType: 'comm_msg',
+            channel: 'shell',
+            username: this._kernel.username,
+            session: this._kernel.clientId
+        };
+        let content = {
+            comm_id: this._id,
+            data: data || {}
+        };
+        let msg = messages_1.KernelMessage.createShellMessage(options, content, metadata, buffers);
+        let future = this._kernel.sendShellMessage(msg, false, true);
+        options.channel = 'iopub';
+        let onClose = this._onClose;
+        if (onClose) {
+            let ioMsg = messages_1.KernelMessage.createMessage(options, content, metadata, buffers);
+            // In the future, we may want to communicate back to the user the possible
+            // promise returned from onClose.
+            onClose(ioMsg);
+        }
+        this.dispose();
+        return future;
+    }
+}
+exports.CommHandler = CommHandler;
