@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const _ = require("lodash");
 var ParameterHint;
 (function (ParameterHint) {
     ParameterHint[ParameterHint["File"] = 0] = "File";
@@ -19,31 +20,31 @@ var ParameterScope;
     ParameterScope[ParameterScope["TypeDoc"] = 0] = "TypeDoc";
     ParameterScope[ParameterScope["TypeScript"] = 1] = "TypeScript";
 })(ParameterScope = exports.ParameterScope || (exports.ParameterScope = {}));
-var OptionDeclaration = (function () {
-    function OptionDeclaration(data) {
-        for (var key in data) {
+class OptionDeclaration {
+    constructor(data) {
+        this.type = ParameterType.String;
+        this.scope = ParameterScope.TypeDoc;
+        for (let key in data) {
             this[key] = data[key];
         }
-        this.type = this.type || ParameterType.String;
-        this.scope = this.scope || ParameterScope.TypeDoc;
     }
-    OptionDeclaration.prototype.getNames = function () {
-        var result = [this.name.toLowerCase()];
+    getNames() {
+        const result = [this.name.toLowerCase()];
         if (this.short) {
             result.push(this.short.toLowerCase());
         }
         return result;
-    };
-    OptionDeclaration.prototype.convert = function (value, errorCallback) {
+    }
+    convert(value, errorCallback) {
         switch (this.type) {
             case ParameterType.Number:
-                value = parseInt(value, 10);
+                value = parseInt(value + '', 10);
                 break;
             case ParameterType.Boolean:
-                value = (typeof value === void 0 ? true : !!value);
+                value = !!value;
                 break;
             case ParameterType.String:
-                value = value || '';
+                value = value ? value + '' : '';
                 break;
             case ParameterType.Array:
                 if (!value) {
@@ -54,15 +55,15 @@ var OptionDeclaration = (function () {
                 }
                 break;
             case ParameterType.Map:
-                var map_1 = this.map;
-                if (map_1 !== 'object') {
-                    var key = value ? (value + '').toLowerCase() : '';
-                    var values = Object.keys(map_1).map(function (key) { return map_1[key]; });
-                    if (map_1 instanceof Map) {
-                        value = map_1.has(key) ? map_1.get(key) : value;
+                const map = this.map || {};
+                if (map !== 'object') {
+                    const key = value ? (value + '').toLowerCase() : '';
+                    const values = _.values(map);
+                    if (map instanceof Map) {
+                        value = map.has(key) ? map.get(key) : value;
                     }
-                    else if (key in map_1) {
-                        value = map_1[key];
+                    else if (key in map) {
+                        value = map[key];
                     }
                     else if (values.indexOf(value) === -1 && errorCallback) {
                         if (this.mapError) {
@@ -76,8 +77,7 @@ var OptionDeclaration = (function () {
                 break;
         }
         return value;
-    };
-    return OptionDeclaration;
-}());
+    }
+}
 exports.OptionDeclaration = OptionDeclaration;
 //# sourceMappingURL=declaration.js.map

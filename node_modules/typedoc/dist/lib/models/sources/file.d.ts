@@ -13,10 +13,10 @@ export declare class SourceFile {
     fullFileName: string;
     fileName: string;
     name: string;
-    url: string;
-    parent: SourceDirectory;
+    url?: string;
+    parent?: SourceDirectory;
     reflections: Reflection[];
-    groups: ReflectionGroup[];
-    categories: ReflectionCategory[];
+    groups?: ReflectionGroup[];
+    categories?: ReflectionCategory[];
     constructor(fullFileName: string);
 }

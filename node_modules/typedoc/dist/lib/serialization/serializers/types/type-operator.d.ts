@@ -1,6 +1,6 @@
 import { TypeOperatorType } from '../../../models';
 import { TypeSerializerComponent } from '../../components';
 export declare class TypeOperatorTypeSerializer extends TypeSerializerComponent<TypeOperatorType> {
-    initialize(): void;
+    supports(t: unknown): boolean;
     toObject(typeOperator: TypeOperatorType, obj?: any): any;
 }

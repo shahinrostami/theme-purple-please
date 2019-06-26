@@ -1,0 +1,128 @@
+// Copyright (c) Jupyter Development Team.
+// Distributed under the terms of the Modified BSD License.
+import { CommandLinker } from '@jupyterlab/apputils';
+import { DocumentRegistry } from '@jupyterlab/docregistry';
+import { ServiceManager } from '@jupyterlab/services';
+import { Application } from '@phosphor/application';
+import { Token } from '@phosphor/coreutils';
+/**
+ * The base Jupyter front-end application class.
+ *
+ * @typeparam `T` - The `shell` type. Defaults to `JupyterFrontEnd.IShell`.
+ *
+ * #### Notes
+ * This type is useful as a generic application against which front-end plugins
+ * can be authored. It inherits from the phosphor `Application`.
+ */
+export class JupyterFrontEnd extends Application {
+    /**
+     * Construct a new JupyterFrontEnd object.
+     */
+    constructor(options) {
+        super(options);
+        // The default restored promise if one does not exist in the options.
+        const restored = new Promise(resolve => {
+            requestAnimationFrame(() => {
+                resolve();
+            });
+        });
+        this.commandLinker =
+            options.commandLinker || new CommandLinker({ commands: this.commands });
+        this.docRegistry = options.docRegistry || new DocumentRegistry();
+        this.restored =
+            options.restored ||
+                this.started.then(() => restored).catch(() => restored);
+        this.serviceManager = options.serviceManager || new ServiceManager();
+        this.commands.addCommand(Private.CONTEXT_MENU_INFO, {
+            label: 'Shift+Right Click for Browser Menu',
+            isEnabled: () => false,
+            execute: () => void 0
+        });
+        this.contextMenu.addItem({
+            command: Private.CONTEXT_MENU_INFO,
+            selector: 'body',
+            rank: Infinity
+        });
+    }
+    /**
+     * Walks up the DOM hierarchy of the target of the active `contextmenu`
+     * event, testing the nodes for a user-supplied funcion. This can
+     * be used to find a node on which to operate, given a context menu click.
+     *
+     * @param test - a function that takes an `HTMLElement` and returns a
+     *   boolean for whether it is the element the requester is seeking.
+     *
+     * @returns an HTMLElement or undefined, if none is found.
+     */
+    contextMenuHitTest(test) {
+        if (!this._contextMenuEvent ||
+            !(this._contextMenuEvent.target instanceof HTMLElement)) {
+            return undefined;
+        }
+        let node = this._contextMenuEvent.target;
+        do {
+            if (test(node)) {
+                return node;
+            }
+            node = node.parentNode;
+        } while (node && node.parentNode && node !== node.parentNode);
+        return undefined;
+        // TODO: we should be able to use .composedPath() to simplify this function
+        // down to something like the below, but it seems like composedPath is
+        // sometimes returning an empty list.
+        /*
+        if (this._contextMenuEvent) {
+          this._contextMenuEvent
+            .composedPath()
+            .filter(x => x instanceof HTMLElement)
+            .find(test);
+        }
+        return undefined;
+        */
+    }
+    /**
+     * A method invoked on a document `'contextmenu'` event.
+     */
+    evtContextMenu(event) {
+        this._contextMenuEvent = event;
+        if (event.shiftKey) {
+            return;
+        }
+        const opened = this.contextMenu.open(event);
+        if (opened) {
+            const items = this.contextMenu.menu.items;
+            // If only the context menu information will be shown,
+            // with no real commands, close the context menu and
+            // allow the native one to open.
+            if (items.length === 1 &&
+                items[0].command === Private.CONTEXT_MENU_INFO) {
+                this.contextMenu.menu.close();
+                return;
+            }
+            // Stop propagation and allow the application context menu to show.
+            event.preventDefault();
+            event.stopPropagation();
+        }
+    }
+}
+/**
+ * The namespace for `JupyterFrontEnd` class statics.
+ */
+(function (JupyterFrontEnd) {
+    /**
+     * The application paths dictionary token.
+     */
+    JupyterFrontEnd.IPaths = new Token('@jupyterlab/application:IPaths');
+})(JupyterFrontEnd || (JupyterFrontEnd = {}));
+/**
+ * A namespace for module-private functionality.
+ */
+var Private;
+(function (Private) {
+    /**
+     * An id for a private context-menu-info
+     * ersatz command.
+     */
+    Private.CONTEXT_MENU_INFO = '__internal:context-menu-info';
+})(Private || (Private = {}));
+//# sourceMappingURL=frontend.js.map

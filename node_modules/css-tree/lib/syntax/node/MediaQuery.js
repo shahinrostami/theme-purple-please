@@ -1,20 +1,23 @@
-var List = require('../../utils/list');
 var TYPE = require('../../tokenizer').TYPE;
 
 var WHITESPACE = TYPE.WhiteSpace;
 var COMMENT = TYPE.Comment;
-var IDENTIFIER = TYPE.Identifier;
+var IDENT = TYPE.Ident;
 var LEFTPARENTHESIS = TYPE.LeftParenthesis;
 
 module.exports = {
     name: 'MediaQuery',
     structure: {
-        children: [['Identifier', 'MediaFeature', 'WhiteSpace']]
+        children: [[
+            'Identifier',
+            'MediaFeature',
+            'WhiteSpace'
+        ]]
     },
     parse: function() {
         this.scanner.skipSC();
 
-        var children = new List();
+        var children = this.createList();
         var child = null;
         var space = null;
 
@@ -29,7 +32,7 @@ module.exports = {
                     space = this.WhiteSpace();
                     continue;
 
-                case IDENTIFIER:
+                case IDENT:
                     child = this.Identifier();
                     break;
 
@@ -42,15 +45,15 @@ module.exports = {
             }
 
             if (space !== null) {
-                children.appendData(space);
+                children.push(space);
                 space = null;
             }
 
-            children.appendData(child);
+            children.push(child);
         }
 
         if (child === null) {
-            this.scanner.error('Identifier or parenthesis is expected');
+            this.error('Identifier or parenthesis is expected');
         }
 
         return {
@@ -59,7 +62,7 @@ module.exports = {
             children: children
         };
     },
-    generate: function(processChunk, node) {
-        this.each(processChunk, node);
+    generate: function(node) {
+        this.children(node);
     }
 };

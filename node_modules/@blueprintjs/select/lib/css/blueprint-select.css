@@ -1,0 +1,135 @@
+/*!
+
+Copyright 2017-present Palantir Technologies, Inc. All rights reserved.
+Licensed under the Apache License, Version 2.0.
+
+*/
+/*
+A mixin to generate the classes for a React CSSTransition which animates any number of CSS
+properties at once.
+
+Transitioned properties are specificed as a map of property names to lists of (inital value, final
+value). For enter & appear transitions, each property will transition from its initial to its final
+value. For exit transitions, each property will transition in reverse, from final to initial.
+
+**Simple example:**
+`@include react-transition("popover", (opacity: 0 1), $before: "&");`
+Transition named "popover" moves opacity from 0 to 1. `"&"` indicates that the
+Transition classes are expected to be applied to this element, where the mixin is invoked.
+
+**Params:**
+$name: React transitionName prop
+$properties: map of CSS property to (initial, final) values
+$duration: transition duration
+$easing: transition easing function
+$delay: transition delay
+$before: selector text to insert before transition name (often to select self: &)
+$after: selector text to insert after transiton name (to select children)
+*/
+/*
+A mixin to generate the classes for one phase of a React CSSTransition.
+`$phase` must be `appear` or `enter` or `exit`.
+If `enter` phase is given then `appear` phase will be generated at the same time.
+If `exit` phase is given then property values are animated in reverse, from final to initial.
+
+**Example:**
+@include react-transition-phase(toast, enter, $enter-translate, $before: "&");
+@include react-transition-phase(toast, leave, $leave-blur, $pt-transition-duration * 3, $before: "&");
+*/
+/*
+Given map of properties to values, set each property to the value at the given index.
+(remember that sass indices are 1-based).
+
+Example: `each-prop((opacity: 0 1), 2)` will print "opacity: 1"
+*/
+/*
+Format transition class name with all the bits.
+"enter" phase will include "appear" phase in returned name.
+*/
+.bp3-omnibar {
+  filter: blur(0);
+  opacity: 1;
+  top: 20vh;
+  left: calc(50% - 250px);
+  z-index: 21;
+  border-radius: 3px;
+  box-shadow: 0 0 0 1px rgba(16, 22, 26, 0.1), 0 4px 8px rgba(16, 22, 26, 0.2), 0 18px 46px 6px rgba(16, 22, 26, 0.2);
+  background-color: #ffffff;
+  width: 500px; }
+  .bp3-omnibar.bp3-overlay-enter, .bp3-omnibar.bp3-overlay-appear {
+    filter: blur(20px);
+    opacity: 0.2; }
+  .bp3-omnibar.bp3-overlay-enter-active, .bp3-omnibar.bp3-overlay-appear-active {
+    filter: blur(0);
+    opacity: 1;
+    transition-property: filter, opacity;
+    transition-duration: 200ms;
+    transition-timing-function: cubic-bezier(0.4, 1, 0.75, 0.9);
+    transition-delay: 0; }
+  .bp3-omnibar.bp3-overlay-exit {
+    filter: blur(0);
+    opacity: 1; }
+  .bp3-omnibar.bp3-overlay-exit-active {
+    filter: blur(20px);
+    opacity: 0.2;
+    transition-property: filter, opacity;
+    transition-duration: 200ms;
+    transition-timing-function: cubic-bezier(0.4, 1, 0.75, 0.9);
+    transition-delay: 0; }
+  .bp3-omnibar .bp3-input {
+    border-radius: 0;
+    background-color: transparent; }
+    .bp3-omnibar .bp3-input, .bp3-omnibar .bp3-input:focus {
+      box-shadow: none; }
+  .bp3-omnibar .bp3-menu {
+    border-radius: 0;
+    box-shadow: inset 0 1px 0 rgba(16, 22, 26, 0.15);
+    background-color: transparent;
+    max-height: calc(60vh - 40px);
+    overflow: auto; }
+    .bp3-omnibar .bp3-menu:empty {
+      display: none; }
+  .bp3-dark .bp3-omnibar, .bp3-omnibar.bp3-dark {
+    box-shadow: 0 0 0 1px rgba(16, 22, 26, 0.2), 0 4px 8px rgba(16, 22, 26, 0.4), 0 18px 46px 6px rgba(16, 22, 26, 0.4);
+    background-color: #30404d; }
+
+.bp3-omnibar-overlay .bp3-overlay-backdrop {
+  background-color: rgba(16, 22, 26, 0.2); }
+
+.bp3-select-popover .bp3-popover-content {
+  padding: 5px; }
+
+.bp3-select-popover .bp3-input-group {
+  margin-bottom: 0; }
+
+.bp3-select-popover .bp3-menu {
+  max-width: 400px;
+  max-height: 300px;
+  overflow: auto;
+  padding: 0; }
+  .bp3-select-popover .bp3-menu:not(:first-child) {
+    padding-top: 5px; }
+
+.bp3-multi-select {
+  min-width: 150px; }
+
+.bp3-multi-select-popover .bp3-menu {
+  max-width: 400px;
+  max-height: 300px;
+  overflow: auto; }
+
+.bp3-select-popover .bp3-popover-content {
+  padding: 5px; }
+
+.bp3-select-popover .bp3-input-group {
+  margin-bottom: 0; }
+
+.bp3-select-popover .bp3-menu {
+  max-width: 400px;
+  max-height: 300px;
+  overflow: auto;
+  padding: 0; }
+  .bp3-select-popover .bp3-menu:not(:first-child) {
+    padding-top: 5px; }
+
+/*# sourceMappingURL=blueprint-select.css.map */

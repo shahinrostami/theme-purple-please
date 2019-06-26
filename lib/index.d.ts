@@ -1,6 +1,6 @@
-import { JupyterLabPlugin } from '@jupyterlab/application';
+import { JupyterFrontEndPlugin } from '@jupyterlab/application';
 /**
  * A plugin for @shahinrostami/theme-purple-please
  */
-declare const plugin: JupyterLabPlugin<void>;
+declare const plugin: JupyterFrontEndPlugin<void>;
 export default plugin;

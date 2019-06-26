@@ -11,16 +11,16 @@ module.exports = {
         value: String
     },
     parse: function() {
-        this.scanner.eat(WHITESPACE);
+        this.eat(WHITESPACE);
         return SPACE;
 
         // return {
         //     type: 'WhiteSpace',
         //     loc: this.getLocation(this.scanner.tokenStart, this.scanner.tokenEnd),
-        //     value: this.scanner.consume(WHITESPACE)
+        //     value: this.consume(WHITESPACE)
         // };
     },
-    generate: function(processChunk, node) {
-        processChunk(node.value);
+    generate: function(node) {
+        this.chunk(node.value);
     }
 };

@@ -1,5 +1,6 @@
 var TYPE = require('../../tokenizer').TYPE;
-var IDENTIFIER = TYPE.Identifier;
+
+var IDENT = TYPE.Ident;
 
 module.exports = {
     name: 'Identifier',
@@ -10,10 +11,10 @@ module.exports = {
         return {
             type: 'Identifier',
             loc: this.getLocation(this.scanner.tokenStart, this.scanner.tokenEnd),
-            name: this.scanner.consume(IDENTIFIER)
+            name: this.consume(IDENT)
         };
     },
-    generate: function(processChunk, node) {
-        processChunk(node.name);
+    generate: function(node) {
+        this.chunk(node.name);
     }
 };

@@ -3,8 +3,8 @@ import { RendererEvent, MarkdownEvent } from '../events';
 export declare class MarkedPlugin extends ContextAwareRendererComponent {
     includeSource: string;
     mediaSource: string;
-    private includes;
-    private mediaDirectory;
+    private includes?;
+    private mediaDirectory?;
     private includePattern;
     private mediaPattern;
     initialize(): void;

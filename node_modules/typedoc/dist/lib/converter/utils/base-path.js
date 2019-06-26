@@ -1,17 +1,17 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var Path = require("path");
-var BasePath = (function () {
-    function BasePath() {
+const Path = require("path");
+class BasePath {
+    constructor() {
         this.basePaths = [];
     }
-    BasePath.prototype.add = function (fileName) {
-        var fileDir = Path.dirname(BasePath.normalize(fileName));
-        var filePath = fileDir.split('/');
-        basePaths: for (var n = 0, c = this.basePaths.length; n < c; n++) {
-            var basePath = this.basePaths[n].split('/');
-            var mMax = Math.min(basePath.length, filePath.length);
-            for (var m = 0; m < mMax; m++) {
+    add(fileName) {
+        const fileDir = Path.dirname(BasePath.normalize(fileName));
+        const filePath = fileDir.split('/');
+        basePaths: for (let n = 0, c = this.basePaths.length; n < c; n++) {
+            const basePath = this.basePaths[n].split('/');
+            const mMax = Math.min(basePath.length, filePath.length);
+            for (let m = 0; m < mMax; m++) {
                 if (basePath[m] === filePath[m]) {
                     continue;
                 }
@@ -29,26 +29,25 @@ var BasePath = (function () {
             return;
         }
         this.basePaths.push(fileDir);
-    };
-    BasePath.prototype.trim = function (fileName) {
+    }
+    trim(fileName) {
         fileName = BasePath.normalize(fileName);
-        for (var n = 0, c = this.basePaths.length; n < c; n++) {
-            var basePath = this.basePaths[n];
+        for (let n = 0, c = this.basePaths.length; n < c; n++) {
+            const basePath = this.basePaths[n];
             if (fileName.substr(0, basePath.length) === basePath) {
                 return fileName.substr(basePath.length + 1);
             }
         }
         return fileName;
-    };
-    BasePath.prototype.reset = function () {
+    }
+    reset() {
         this.basePaths = [];
-    };
-    BasePath.normalize = function (path) {
+    }
+    static normalize(path) {
         path = path.replace(/\\/g, '/');
         path = path.replace(/^["']+|["']+$/g, '');
-        return path.replace(/^([^\:]+)\:\//, function (m, m1) { return m1.toUpperCase() + ':/'; });
-    };
-    return BasePath;
-}());
+        return path.replace(/^([^\:]+)\:\//, (m, m1) => m1.toUpperCase() + ':/');
+    }
+}
 exports.BasePath = BasePath;
 //# sourceMappingURL=base-path.js.map

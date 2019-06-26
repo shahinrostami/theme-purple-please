@@ -16,8 +16,8 @@ module.exports = {
         var children = this.readSequence(this.scope.Selector);
 
         // nothing were consumed
-        if (children.isEmpty()) {
-            this.scanner.error('Selector is expected');
+        if (this.getFirstListNode(children) === null) {
+            this.error('Selector is expected');
         }
 
         return {
@@ -26,7 +26,7 @@ module.exports = {
             children: children
         };
     },
-    generate: function(processChunk, node) {
-        this.each(processChunk, node);
+    generate: function(node) {
+        this.children(node);
     }
 };

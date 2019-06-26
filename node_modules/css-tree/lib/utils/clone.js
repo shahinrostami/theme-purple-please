@@ -1,6 +1,4 @@
-'use strict';
-
-var List = require('./list');
+var List = require('../common/List');
 
 module.exports = function clone(node) {
     var result = {};
@@ -9,10 +7,8 @@ module.exports = function clone(node) {
         var value = node[key];
 
         if (value) {
-            if (Array.isArray(value)) {
-                value = value.slice(0);
-            } else if (value instanceof List) {
-                value = new List().fromArray(value.map(clone));
+            if (Array.isArray(value) || value instanceof List) {
+                value = value.map(clone);
             } else if (value.constructor === Object) {
                 value = clone(value);
             }

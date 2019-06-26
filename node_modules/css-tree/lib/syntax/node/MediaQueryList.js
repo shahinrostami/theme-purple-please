@@ -1,18 +1,19 @@
-var List = require('../../utils/list');
 var COMMA = require('../../tokenizer').TYPE.Comma;
 
 module.exports = {
     name: 'MediaQueryList',
     structure: {
-        children: [['MediaQuery']]
+        children: [[
+            'MediaQuery'
+        ]]
     },
     parse: function(relative) {
-        var children = new List();
+        var children = this.createList();
 
         this.scanner.skipSC();
 
         while (!this.scanner.eof) {
-            children.appendData(this.MediaQuery(relative));
+            children.push(this.MediaQuery(relative));
 
             if (this.scanner.tokenType !== COMMA) {
                 break;
@@ -27,7 +28,9 @@ module.exports = {
             children: children
         };
     },
-    generate: function(processChunk, node) {
-        this.eachComma(processChunk, node);
+    generate: function(node) {
+        this.children(node, function() {
+            this.chunk(',');
+        });
     }
 };

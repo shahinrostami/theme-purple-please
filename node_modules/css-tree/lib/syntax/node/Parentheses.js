@@ -1,4 +1,5 @@
 var TYPE = require('../../tokenizer').TYPE;
+
 var LEFTPARENTHESIS = TYPE.LeftParenthesis;
 var RIGHTPARENTHESIS = TYPE.RightParenthesis;
 
@@ -11,9 +12,13 @@ module.exports = {
         var start = this.scanner.tokenStart;
         var children = null;
 
-        this.scanner.eat(LEFTPARENTHESIS);
+        this.eat(LEFTPARENTHESIS);
+
         children = readSequence.call(this, recognizer);
-        this.scanner.eat(RIGHTPARENTHESIS);
+
+        if (!this.scanner.eof) {
+            this.eat(RIGHTPARENTHESIS);
+        }
 
         return {
             type: 'Parentheses',
@@ -21,9 +26,9 @@ module.exports = {
             children: children
         };
     },
-    generate: function(processChunk, node) {
-        processChunk('(');
-        this.each(processChunk, node);
-        processChunk(')');
+    generate: function(node) {
+        this.chunk('(');
+        this.children(node);
+        this.chunk(')');
     }
 };

@@ -11,9 +11,9 @@ export declare class ProjectReflection extends ContainerReflection {
     };
     directory: SourceDirectory;
     files: SourceFile[];
-    categories: ReflectionCategory[];
+    categories?: ReflectionCategory[];
     name: string;
-    readme: string;
+    readme?: string;
     packageInfo: any;
     constructor(name: string);
     isProject(): boolean;

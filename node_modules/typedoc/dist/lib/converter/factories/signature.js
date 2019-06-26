@@ -1,19 +1,19 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var ts = require("typescript");
-var index_1 = require("../../models/index");
-var converter_1 = require("../converter");
-var parameter_1 = require("./parameter");
-var reference_1 = require("./reference");
+const ts = require("typescript");
+const index_1 = require("../../models/index");
+const converter_1 = require("../converter");
+const parameter_1 = require("./parameter");
+const reference_1 = require("./reference");
 function createSignature(context, node, name, kind) {
-    var container = context.scope;
+    const container = context.scope;
     if (!(container instanceof index_1.ContainerReflection)) {
         throw new Error('Expected container reflection.');
     }
-    var signature = new index_1.SignatureReflection(container, name, kind);
+    const signature = new index_1.SignatureReflection(name, kind, container);
     context.registerReflection(signature, node);
-    context.withScope(signature, node.typeParameters, true, function () {
-        node.parameters.forEach(function (parameter) {
+    context.withScope(signature, node.typeParameters, true, () => {
+        node.parameters.forEach((parameter) => {
             parameter_1.createParameter(context, parameter);
         });
         signature.type = extractSignatureType(context, node);
@@ -26,19 +26,17 @@ function createSignature(context, node, name, kind) {
 }
 exports.createSignature = createSignature;
 function extractSignatureType(context, node) {
-    var checker = context.checker;
+    const checker = context.checker;
     if (node.kind & ts.SyntaxKind.CallSignature || node.kind & ts.SyntaxKind.CallExpression) {
         try {
-            var signature = checker.getSignatureFromDeclaration(node);
+            const signature = checker.getSignatureFromDeclaration(node);
+            if (!signature) {
+                throw new Error('Failed to retrieve signature for node.');
+            }
             return context.converter.convertType(context, node.type, checker.getReturnTypeOfSignature(signature));
         }
         catch (error) { }
     }
-    if (node.type) {
-        return context.converter.convertType(context, node.type);
-    }
-    else {
-        return context.converter.convertType(context, node);
-    }
+    return context.converter.convertType(context, node.type || node);
 }
 //# sourceMappingURL=signature.js.map

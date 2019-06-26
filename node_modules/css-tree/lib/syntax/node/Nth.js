@@ -1,4 +1,3 @@
-// https://drafts.csswg.org/css-syntax-3/#the-anb-type
 module.exports = {
     name: 'Nth',
     structure: {
@@ -27,7 +26,7 @@ module.exports = {
             selector = this.SelectorList();
 
             if (this.needPositions) {
-                end = selector.children.last().loc.end.offset;
+                end = this.getLastListNode(selector.children).loc.end.offset;
             }
         } else {
             if (this.needPositions) {
@@ -42,11 +41,11 @@ module.exports = {
             selector: selector
         };
     },
-    generate: function(processChunk, node) {
-        this.generate(processChunk, node.nth);
+    generate: function(node) {
+        this.node(node.nth);
         if (node.selector !== null) {
-            processChunk(' of ');
-            this.generate(processChunk, node.selector);
+            this.chunk(' of ');
+            this.node(node.selector);
         }
     }
 };

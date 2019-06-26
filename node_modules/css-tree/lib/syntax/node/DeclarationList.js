@@ -1,21 +1,23 @@
-var List = require('../../utils/list');
 var TYPE = require('../../tokenizer').TYPE;
+var rawMode = require('./Raw').mode;
 
 var WHITESPACE = TYPE.WhiteSpace;
 var COMMENT = TYPE.Comment;
 var SEMICOLON = TYPE.Semicolon;
 
 function consumeRaw(startToken) {
-    return this.Raw(startToken, 0, SEMICOLON, true, true);
+    return this.Raw(startToken, rawMode.semicolonIncluded, true);
 }
 
 module.exports = {
     name: 'DeclarationList',
     structure: {
-        children: [['Declaration']]
+        children: [[
+            'Declaration'
+        ]]
     },
     parse: function() {
-        var children = new List();
+        var children = this.createList();
 
         scan:
         while (!this.scanner.eof) {
@@ -27,7 +29,7 @@ module.exports = {
                     break;
 
                 default:
-                    children.appendData(this.tolerantParse(this.Declaration, consumeRaw));
+                    children.push(this.parseWithFallback(this.Declaration, consumeRaw));
             }
         }
 
@@ -37,7 +39,11 @@ module.exports = {
             children: children
         };
     },
-    generate: function(processChunk, node) {
-        this.each(processChunk, node);
+    generate: function(node) {
+        this.children(node, function(prev) {
+            if (prev.type === 'Declaration') {
+                this.chunk(';');
+            }
+        });
     }
 };

@@ -1,11 +1,12 @@
 var TYPE = require('../../tokenizer').TYPE;
 
-var IDENTIFIER = TYPE.Identifier;
+var IDENT = TYPE.Ident;
 var NUMBER = TYPE.Number;
+var DIMENSION = TYPE.Dimension;
 var LEFTPARENTHESIS = TYPE.LeftParenthesis;
 var RIGHTPARENTHESIS = TYPE.RightParenthesis;
 var COLON = TYPE.Colon;
-var SOLIDUS = TYPE.Solidus;
+var DELIM = TYPE.Delim;
 
 module.exports = {
     name: 'MediaFeature',
@@ -18,21 +19,19 @@ module.exports = {
         var name;
         var value = null;
 
-        this.scanner.eat(LEFTPARENTHESIS);
+        this.eat(LEFTPARENTHESIS);
         this.scanner.skipSC();
 
-        name = this.scanner.consume(IDENTIFIER);
+        name = this.consume(IDENT);
         this.scanner.skipSC();
 
         if (this.scanner.tokenType !== RIGHTPARENTHESIS) {
-            this.scanner.eat(COLON);
+            this.eat(COLON);
             this.scanner.skipSC();
 
             switch (this.scanner.tokenType) {
                 case NUMBER:
-                    if (this.scanner.lookupType(1) === IDENTIFIER) {
-                        value = this.Dimension();
-                    } else if (this.scanner.lookupNonWSType(1) === SOLIDUS) {
+                    if (this.lookupNonWSType(1) === DELIM) {
                         value = this.Ratio();
                     } else {
                         value = this.Number();
@@ -40,19 +39,23 @@ module.exports = {
 
                     break;
 
-                case IDENTIFIER:
+                case DIMENSION:
+                    value = this.Dimension();
+                    break;
+
+                case IDENT:
                     value = this.Identifier();
 
                     break;
 
                 default:
-                    this.scanner.error('Number, dimension, ratio or identifier is expected');
+                    this.error('Number, dimension, ratio or identifier is expected');
             }
 
             this.scanner.skipSC();
         }
 
-        this.scanner.eat(RIGHTPARENTHESIS);
+        this.eat(RIGHTPARENTHESIS);
 
         return {
             type: 'MediaFeature',
@@ -61,13 +64,13 @@ module.exports = {
             value: value
         };
     },
-    generate: function(processChunk, node) {
-        processChunk('(');
-        processChunk(node.name);
+    generate: function(node) {
+        this.chunk('(');
+        this.chunk(node.name);
         if (node.value !== null) {
-            processChunk(':');
-            this.generate(processChunk, node.value);
+            this.chunk(':');
+            this.node(node.value);
         }
-        processChunk(')');
+        this.chunk(')');
     }
 };

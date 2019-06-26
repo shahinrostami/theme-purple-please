@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var ts = require("typescript");
-var _ts = require("../ts-internal");
-var FS = require("fs");
-var existingDirectories = {};
+const ts = require("typescript");
+const _ts = require("../ts-internal");
+const FS = require("fs");
+const existingDirectories = {};
 function normalizePath(path) {
     return path.replace(/\\/g, '/');
 }
@@ -21,7 +21,7 @@ function directoryExists(directoryPath) {
 exports.directoryExists = directoryExists;
 function ensureDirectoriesExist(directoryPath) {
     if (directoryPath.length > _ts.getRootLength(directoryPath) && !directoryExists(directoryPath)) {
-        var parentDirectory = _ts.getDirectoryPath(directoryPath);
+        const parentDirectory = _ts.getDirectoryPath(directoryPath);
         ensureDirectoriesExist(parentDirectory);
         ts.sys.createDirectory(directoryPath);
     }
@@ -40,13 +40,13 @@ function writeFile(fileName, data, writeByteOrderMark, onError) {
 }
 exports.writeFile = writeFile;
 function readFile(file) {
-    var buffer = FS.readFileSync(file);
+    const buffer = FS.readFileSync(file);
     switch (buffer[0]) {
         case 0xFE:
             if (buffer[1] === 0xFF) {
-                var i = 0;
+                let i = 0;
                 while ((i + 1) < buffer.length) {
-                    var temp = buffer[i];
+                    const temp = buffer[i];
                     buffer[i] = buffer[i + 1];
                     buffer[i + 1] = temp;
                     i += 2;

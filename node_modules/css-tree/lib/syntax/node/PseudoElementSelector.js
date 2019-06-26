@@ -1,12 +1,11 @@
-var List = require('../../utils/list');
 var TYPE = require('../../tokenizer').TYPE;
 
-var IDENTIFIER = TYPE.Identifier;
+var IDENT = TYPE.Ident;
 var FUNCTION = TYPE.Function;
 var COLON = TYPE.Colon;
 var RIGHTPARENTHESIS = TYPE.RightParenthesis;
 
-// :: ident [ '(' .. ')' ]?
+// :: [ <ident> | <function-token> <any-value>? ) ]
 module.exports = {
     name: 'PseudoElementSelector',
     structure: {
@@ -19,11 +18,11 @@ module.exports = {
         var name;
         var nameLowerCase;
 
-        this.scanner.eat(COLON);
-        this.scanner.eat(COLON);
+        this.eat(COLON);
+        this.eat(COLON);
 
         if (this.scanner.tokenType === FUNCTION) {
-            name = this.scanner.consumeFunctionName();
+            name = this.consumeFunctionName();
             nameLowerCase = name.toLowerCase();
 
             if (this.pseudo.hasOwnProperty(nameLowerCase)) {
@@ -31,14 +30,15 @@ module.exports = {
                 children = this.pseudo[nameLowerCase].call(this);
                 this.scanner.skipSC();
             } else {
-                children = new List().appendData(
-                    this.Raw(this.scanner.currentToken, 0, 0, false, false)
+                children = this.createList();
+                children.push(
+                    this.Raw(this.scanner.tokenIndex, null, false)
                 );
             }
 
-            this.scanner.eat(RIGHTPARENTHESIS);
+            this.eat(RIGHTPARENTHESIS);
         } else {
-            name = this.scanner.consume(IDENTIFIER);
+            name = this.consume(IDENT);
         }
 
         return {
@@ -48,14 +48,14 @@ module.exports = {
             children: children
         };
     },
-    generate: function(processChunk, node) {
-        processChunk('::');
-        processChunk(node.name);
+    generate: function(node) {
+        this.chunk('::');
+        this.chunk(node.name);
 
         if (node.children !== null) {
-            processChunk('(');
-            this.each(processChunk, node);
-            processChunk(')');
+            this.chunk('(');
+            this.children(node);
+            this.chunk(')');
         }
     },
     walkContext: 'function'

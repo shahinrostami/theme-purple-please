@@ -1,27 +1,27 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var Type = (function () {
-    function Type() {
+class Type {
+    constructor() {
         this.type = 'void';
     }
-    Type.prototype.equals = function (type) {
+    equals(type) {
         return false;
-    };
-    Type.prototype.toObject = function () {
-        var result = {};
+    }
+    toObject() {
+        let result = {};
         result.type = this.type;
         return result;
-    };
-    Type.prototype.toString = function () {
+    }
+    toString() {
         return 'void';
-    };
-    Type.isTypeListSimiliar = function (a, b) {
+    }
+    static isTypeListSimilar(a, b) {
         if (a.length !== b.length) {
             return false;
         }
-        outerLoop: for (var an = 0, count = a.length; an < count; an++) {
-            var at = a[an];
-            for (var bn = 0; bn < count; bn++) {
+        outerLoop: for (let an = 0, count = a.length; an < count; an++) {
+            const at = a[an];
+            for (let bn = 0; bn < count; bn++) {
                 if (b[bn].equals(at)) {
                     continue outerLoop;
                 }
@@ -29,19 +29,18 @@ var Type = (function () {
             return false;
         }
         return true;
-    };
-    Type.isTypeListEqual = function (a, b) {
+    }
+    static isTypeListEqual(a, b) {
         if (a.length !== b.length) {
             return false;
         }
-        for (var index = 0, count = a.length; index < count; index++) {
+        for (let index = 0, count = a.length; index < count; index++) {
             if (!a[index].equals(b[index])) {
                 return false;
             }
         }
         return true;
-    };
-    return Type;
-}());
+    }
+}
 exports.Type = Type;
 //# sourceMappingURL=abstract.js.map

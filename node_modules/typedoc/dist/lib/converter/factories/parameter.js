@@ -1,17 +1,20 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var _ts = require("../../ts-internal");
-var index_1 = require("../../models/reflections/index");
-var converter_1 = require("../converter");
-var convert_expression_1 = require("../convert-expression");
+const _ts = require("../../ts-internal");
+const index_1 = require("../../models/reflections/index");
+const converter_1 = require("../converter");
+const convert_expression_1 = require("../convert-expression");
 function createParameter(context, node) {
-    var signature = context.scope;
-    if (!(signature instanceof index_1.SignatureReflection)) {
+    if (!(context.scope instanceof index_1.SignatureReflection)) {
         throw new Error('Expected signature reflection.');
     }
-    var parameter = new index_1.ParameterReflection(signature, node.symbol.name, index_1.ReflectionKind.Parameter);
+    const signature = context.scope;
+    if (!node.symbol) {
+        return;
+    }
+    const parameter = new index_1.ParameterReflection(node.symbol.name, index_1.ReflectionKind.Parameter, signature);
     context.registerReflection(parameter, node);
-    context.withScope(parameter, function () {
+    context.withScope(parameter, () => {
         if (_ts.isBindingPattern(node.name)) {
             parameter.type = context.converter.convertType(context, node.name);
             parameter.name = '__namedParameters';

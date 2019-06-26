@@ -1,19 +1,19 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var ts = require("typescript");
-var _ts = require("../../ts-internal");
-var index_1 = require("../../models/comments/index");
+const ts = require("typescript");
+const _ts = require("../../ts-internal");
+const index_1 = require("../../models/comments/index");
 function createComment(node) {
-    var comment = getRawComment(node);
-    if (comment == null) {
-        return null;
+    const comment = getRawComment(node);
+    if (!comment) {
+        return;
     }
     return parseComment(comment);
 }
 exports.createComment = createComment;
 function isTopmostModuleDeclaration(node) {
     if (node.nextContainer && node.nextContainer.kind === ts.SyntaxKind.ModuleDeclaration) {
-        var next = node.nextContainer;
+        let next = node.nextContainer;
         if (node.name.end + 1 === next.name.pos) {
             return false;
         }
@@ -22,9 +22,9 @@ function isTopmostModuleDeclaration(node) {
 }
 function getRootModuleDeclaration(node) {
     while (node.parent && node.parent.kind === ts.SyntaxKind.ModuleDeclaration) {
-        var parent_1 = node.parent;
-        if (node.name.pos === parent_1.name.end + 1) {
-            node = parent_1;
+        let parent = node.parent;
+        if (node.name.pos === parent.name.end + 1) {
+            node = parent;
         }
         else {
             break;
@@ -38,19 +38,19 @@ function getRawComment(node) {
     }
     else if (node.kind === ts.SyntaxKind.ModuleDeclaration) {
         if (!isTopmostModuleDeclaration(node)) {
-            return null;
+            return;
         }
         else {
             node = getRootModuleDeclaration(node);
         }
     }
-    var sourceFile = _ts.getSourceFileOfNode(node);
-    var comments = _ts.getJSDocCommentRanges(node, sourceFile.text);
+    const sourceFile = _ts.getSourceFileOfNode(node);
+    const comments = _ts.getJSDocCommentRanges(node, sourceFile.text);
     if (comments && comments.length) {
-        var comment = void 0;
+        let comment;
         if (node.kind === ts.SyntaxKind.SourceFile) {
             if (comments.length === 1) {
-                return null;
+                return;
             }
             comment = comments[0];
         }
@@ -60,14 +60,13 @@ function getRawComment(node) {
         return sourceFile.text.substring(comment.pos, comment.end);
     }
     else {
-        return null;
+        return;
     }
 }
 exports.getRawComment = getRawComment;
-function parseComment(text, comment) {
-    if (comment === void 0) { comment = new index_1.Comment(); }
-    var currentTag;
-    var shortText = 0;
+function parseComment(text, comment = new index_1.Comment()) {
+    let currentTag;
+    let shortText = 0;
     function consumeTypeData(line) {
         line = line.replace(/^\{[^\}]*\}+/, '');
         line = line.replace(/^\[[^\[][^\]]*\]+/, '');
@@ -93,15 +92,15 @@ function parseComment(text, comment) {
         }
     }
     function readTagLine(line, tag) {
-        var tagName = tag[1].toLowerCase();
-        var paramName;
+        let tagName = tag[1].toLowerCase();
+        let paramName;
         line = line.substr(tagName.length + 1).trim();
         if (tagName === 'return') {
             tagName = 'returns';
         }
         if (tagName === 'param' || tagName === 'typeparam') {
             line = consumeTypeData(line);
-            var param = /[^\s]+/.exec(line);
+            const param = /[^\s]+/.exec(line);
             if (param) {
                 paramName = param[0];
                 line = line.substr(paramName.length + 1).trim();
@@ -118,8 +117,8 @@ function parseComment(text, comment) {
         }
         comment.tags.push(currentTag);
     }
-    var CODE_FENCE = /^\s*```(?!.*```)/;
-    var inCode = false;
+    const CODE_FENCE = /^\s*```(?!.*```)/;
+    let inCode = false;
     function readLine(line) {
         line = line.replace(/^\s*\*? ?/, '');
         line = line.replace(/\s*$/, '');
@@ -127,7 +126,7 @@ function parseComment(text, comment) {
             inCode = !inCode;
         }
         if (!inCode) {
-            var tag = /^@(\S+)/.exec(line);
+            const tag = /^@(\S+)/.exec(line);
             if (tag) {
                 return readTagLine(line, tag);
             }

@@ -1,13 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var FS = require("fs");
-var Path = require("path");
-var Util = require("util");
-var helpers_1 = require("./resources/helpers");
-var templates_1 = require("./resources/templates");
-var renderer_1 = require("../renderer");
-var Resources = (function () {
-    function Resources(theme) {
+const FS = require("fs");
+const Path = require("path");
+const Util = require("util");
+const helpers_1 = require("./resources/helpers");
+const templates_1 = require("./resources/templates");
+const renderer_1 = require("../renderer");
+class Resources {
+    constructor(theme) {
+        this.isActive = false;
         this.theme = theme;
         this.templates = new templates_1.TemplateStack();
         this.layouts = new templates_1.TemplateStack();
@@ -16,7 +17,7 @@ var Resources = (function () {
         this.addDirectory('default', renderer_1.Renderer.getDefaultTheme());
         this.addDirectory('theme', theme.basePath);
     }
-    Resources.prototype.activate = function () {
+    activate() {
         if (this.isActive) {
             return false;
         }
@@ -24,8 +25,8 @@ var Resources = (function () {
         this.partials.activate();
         this.helpers.activate();
         return true;
-    };
-    Resources.prototype.deactivate = function () {
+    }
+    deactivate() {
         if (!this.isActive) {
             return false;
         }
@@ -33,11 +34,11 @@ var Resources = (function () {
         this.partials.deactivate();
         this.helpers.deactivate();
         return true;
-    };
-    Resources.prototype.getTheme = function () {
+    }
+    getTheme() {
         return this.theme;
-    };
-    Resources.prototype.addDirectory = function (name, path) {
+    }
+    addDirectory(name, path) {
         if (this.isActive) {
             throw new Error('Cannot add directories while the resource is active.');
         }
@@ -52,8 +53,8 @@ var Resources = (function () {
         this.layouts.addOrigin(name, Path.join(path, 'layouts'), true);
         this.partials.addOrigin(name, Path.join(path, 'partials'), true);
         this.helpers.addOrigin(name, Path.join(path, 'helpers'), true);
-    };
-    Resources.prototype.removeDirectory = function (name) {
+    }
+    removeDirectory(name) {
         if (this.isActive) {
             throw new Error('Cannot remove directories while the resource is active.');
         }
@@ -61,8 +62,8 @@ var Resources = (function () {
         this.layouts.removeOrigin(name);
         this.partials.removeOrigin(name);
         this.helpers.removeOrigin(name);
-    };
-    Resources.prototype.removeAllDirectories = function () {
+    }
+    removeAllDirectories() {
         if (this.isActive) {
             throw new Error('Cannot remove directories while the resource is active.');
         }
@@ -70,8 +71,7 @@ var Resources = (function () {
         this.layouts.removeAllOrigins();
         this.partials.removeAllOrigins();
         this.helpers.removeAllOrigins();
-    };
-    return Resources;
-}());
+    }
+}
 exports.Resources = Resources;
 //# sourceMappingURL=resources.js.map

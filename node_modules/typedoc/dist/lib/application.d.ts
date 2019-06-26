@@ -22,7 +22,7 @@ export declare class Application extends ChildableComponent<Application, Abstrac
     readonly isCLI: boolean;
     getTypeScriptPath(): string;
     getTypeScriptVersion(): string;
-    convert(src: string[]): ProjectReflection;
+    convert(src: string[]): ProjectReflection | undefined;
     generateDocs(src: string[], out: string): boolean;
     generateDocs(project: ProjectReflection, out: string): boolean;
     generateJson(src: string[], out: string): boolean;

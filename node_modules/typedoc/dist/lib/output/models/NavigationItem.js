@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var NavigationItem = (function () {
-    function NavigationItem(title, url, parent, cssClasses, reflection) {
+class NavigationItem {
+    constructor(title, url, parent, cssClasses, reflection) {
         this.title = title || '';
         this.url = url || '';
-        this.parent = parent || null;
+        this.parent = parent;
         this.cssClasses = cssClasses || '';
         this.reflection = reflection;
         if (!url) {
@@ -17,8 +17,8 @@ var NavigationItem = (function () {
             this.parent.children.push(this);
         }
     }
-    NavigationItem.create = function (reflection, parent, useShortNames) {
-        var name;
+    static create(reflection, parent, useShortNames) {
+        let name;
         if (useShortNames || (parent && parent.parent)) {
             name = reflection.name;
         }
@@ -27,11 +27,10 @@ var NavigationItem = (function () {
         }
         name = name.trim();
         if (name === '') {
-            name = "<em>" + reflection.kindString + "</em>";
+            name = `<em>${reflection.kindString}</em>`;
         }
         return new NavigationItem(name, reflection.url, parent, reflection.cssClasses, reflection);
-    };
-    return NavigationItem;
-}());
+    }
+}
 exports.NavigationItem = NavigationItem;
 //# sourceMappingURL=NavigationItem.js.map

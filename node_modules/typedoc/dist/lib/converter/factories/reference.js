@@ -1,10 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var index_1 = require("../../models/types/index");
+const index_1 = require("../../models/types/index");
 function createReferenceType(context, symbol, includeParent) {
-    var checker = context.checker;
-    var id = context.getSymbolID(symbol);
-    var name = checker.symbolToString(symbol);
+    if (!symbol) {
+        return;
+    }
+    const checker = context.checker;
+    const id = context.getSymbolID(symbol);
+    let name = checker.symbolToString(symbol);
     if (includeParent && symbol.parent) {
         name = checker.symbolToString(symbol.parent) + '.' + name;
     }

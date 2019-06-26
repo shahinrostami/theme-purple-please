@@ -1,13 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var ts = require("typescript");
-var _ts = require("../ts-internal");
+const ts = require("typescript");
+const _ts = require("../ts-internal");
 function convertDefaultValue(node) {
     if (node.initializer) {
         return convertExpression(node.initializer);
     }
     else {
-        return null;
+        return undefined;
     }
 }
 exports.convertDefaultValue = convertDefaultValue;
@@ -22,7 +22,7 @@ function convertExpression(expression) {
         case ts.SyntaxKind.FalseKeyword:
             return 'false';
         default:
-            var source = _ts.getSourceFileOfNode(expression);
+            const source = _ts.getSourceFileOfNode(expression);
             return source.text.substring(expression.pos, expression.end);
     }
 }

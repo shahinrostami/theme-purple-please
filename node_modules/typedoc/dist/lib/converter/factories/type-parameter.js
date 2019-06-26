@@ -1,15 +1,17 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var index_1 = require("../../models/index");
-var converter_1 = require("../converter");
+const index_1 = require("../../models/index");
+const converter_1 = require("../converter");
 function createTypeParameter(context, node) {
-    var typeParameter = new index_1.TypeParameterType();
-    typeParameter.name = node.symbol.name;
+    if (!node.symbol) {
+        return;
+    }
+    const typeParameter = new index_1.TypeParameterType(node.symbol.name);
     if (node.constraint) {
         typeParameter.constraint = context.converter.convertType(context, node.constraint);
     }
-    var reflection = context.scope;
-    var typeParameterReflection = new index_1.TypeParameterReflection(reflection, typeParameter);
+    const reflection = context.scope;
+    const typeParameterReflection = new index_1.TypeParameterReflection(typeParameter, reflection);
     if (!reflection.typeParameters) {
         reflection.typeParameters = [];
     }

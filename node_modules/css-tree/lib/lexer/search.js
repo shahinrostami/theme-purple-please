@@ -1,36 +1,25 @@
-var List = require('../utils/list');
+var List = require('../common/List');
 
 function getFirstMatchNode(matchNode) {
-    if (matchNode.type === 'ASTNode') {
+    if ('node' in matchNode) {
         return matchNode.node;
     }
 
-    if (matchNode.match.length !== 0) {
-        return getFirstMatchNode(matchNode.match[0]);
-    }
-
-    return null;
+    return getFirstMatchNode(matchNode.match[0]);
 }
 
 function getLastMatchNode(matchNode) {
-    if (matchNode.type === 'ASTNode') {
+    if ('node' in matchNode) {
         return matchNode.node;
     }
 
-    if (matchNode.match.length !== 0) {
-        return getLastMatchNode(matchNode.match[matchNode.match.length - 1]);
-    }
-
-    return null;
+    return getLastMatchNode(matchNode.match[matchNode.match.length - 1]);
 }
 
 function matchFragments(lexer, ast, match, type, name) {
     function findFragments(matchNode) {
-        if (matchNode.type === 'ASTNode') {
-            return;
-        }
-
-        if (matchNode.syntax.type === type &&
+        if (matchNode.syntax !== null &&
+            matchNode.syntax.type === type &&
             matchNode.syntax.name === name) {
             var start = getFirstMatchNode(matchNode);
             var end = getLastMatchNode(matchNode);
@@ -38,7 +27,6 @@ function matchFragments(lexer, ast, match, type, name) {
             lexer.syntax.walk(ast, function(node, item, list) {
                 if (node === start) {
                     var nodes = new List();
-                    var loc = null;
 
                     do {
                         nodes.appendData(item.data);
@@ -50,24 +38,17 @@ function matchFragments(lexer, ast, match, type, name) {
                         item = item.next;
                     } while (item !== null);
 
-                    if (start.loc !== null && end.loc !== null) {
-                        loc = {
-                            source: start.loc.source,
-                            start: start.loc.start,
-                            end: end.loc.end
-                        };
-                    }
-
                     fragments.push({
                         parent: list,
-                        loc: loc,
                         nodes: nodes
                     });
                 }
             });
         }
 
-        matchNode.match.forEach(findFragments);
+        if (Array.isArray(matchNode.match)) {
+            matchNode.match.forEach(findFragments);
+        }
     }
 
     var fragments = [];

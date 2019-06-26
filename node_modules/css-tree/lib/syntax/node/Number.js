@@ -9,10 +9,10 @@ module.exports = {
         return {
             type: 'Number',
             loc: this.getLocation(this.scanner.tokenStart, this.scanner.tokenEnd),
-            value: this.scanner.consume(NUMBER)
+            value: this.consume(NUMBER)
         };
     },
-    generate: function(processChunk, node) {
-        processChunk(node.value);
+    generate: function(node) {
+        this.chunk(node.value);
     }
 };

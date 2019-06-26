@@ -1,7 +1,8 @@
 var TYPE = require('../../tokenizer').TYPE;
+
 var RIGHTPARENTHESIS = TYPE.RightParenthesis;
 
-// <function-token> <sequence> ')'
+// <function-token> <sequence> )
 module.exports = {
     name: 'Function',
     structure: {
@@ -10,7 +11,7 @@ module.exports = {
     },
     parse: function(readSequence, recognizer) {
         var start = this.scanner.tokenStart;
-        var name = this.scanner.consumeFunctionName();
+        var name = this.consumeFunctionName();
         var nameLowerCase = name.toLowerCase();
         var children;
 
@@ -18,7 +19,9 @@ module.exports = {
             ? recognizer[nameLowerCase].call(this, recognizer)
             : readSequence.call(this, recognizer);
 
-        this.scanner.eat(RIGHTPARENTHESIS);
+        if (!this.scanner.eof) {
+            this.eat(RIGHTPARENTHESIS);
+        }
 
         return {
             type: 'Function',
@@ -27,11 +30,11 @@ module.exports = {
             children: children
         };
     },
-    generate: function(processChunk, node) {
-        processChunk(node.name);
-        processChunk('(');
-        this.each(processChunk, node);
-        processChunk(')');
+    generate: function(node) {
+        this.chunk(node.name);
+        this.chunk('(');
+        this.children(node);
+        this.chunk(')');
     },
     walkContext: 'function'
 };

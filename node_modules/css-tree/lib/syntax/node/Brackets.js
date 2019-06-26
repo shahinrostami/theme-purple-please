@@ -1,10 +1,8 @@
 var TYPE = require('../../tokenizer').TYPE;
+
 var LEFTSQUAREBRACKET = TYPE.LeftSquareBracket;
 var RIGHTSQUAREBRACKET = TYPE.RightSquareBracket;
 
-// currently only Grid Layout uses square brackets, but left it universal
-// https://drafts.csswg.org/css-grid/#track-sizing
-// [ ident* ]
 module.exports = {
     name: 'Brackets',
     structure: {
@@ -14,9 +12,13 @@ module.exports = {
         var start = this.scanner.tokenStart;
         var children = null;
 
-        this.scanner.eat(LEFTSQUAREBRACKET);
+        this.eat(LEFTSQUAREBRACKET);
+
         children = readSequence.call(this, recognizer);
-        this.scanner.eat(RIGHTSQUAREBRACKET);
+
+        if (!this.scanner.eof) {
+            this.eat(RIGHTSQUAREBRACKET);
+        }
 
         return {
             type: 'Brackets',
@@ -24,9 +26,9 @@ module.exports = {
             children: children
         };
     },
-    generate: function(processChunk, node) {
-        processChunk('[');
-        this.each(processChunk, node);
-        processChunk(']');
+    generate: function(node) {
+        this.chunk('[');
+        this.children(node);
+        this.chunk(']');
     }
 };

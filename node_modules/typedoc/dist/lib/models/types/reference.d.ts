@@ -3,9 +3,9 @@ import { Type } from './abstract';
 export declare class ReferenceType extends Type {
     readonly type: string;
     name: string;
-    typeArguments: Type[];
+    typeArguments?: Type[];
     symbolID: number;
-    reflection: Reflection;
+    reflection?: Reflection;
     static SYMBOL_ID_RESOLVED: number;
     static SYMBOL_ID_RESOLVE_BY_NAME: number;
     constructor(name: string, symbolID: number, reflection?: Reflection);
