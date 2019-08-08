@@ -33,8 +33,6 @@ all of MD as it is not optimized for dense, information rich UIs.
    * https://material-components-web.appspot.com/elevation.html
    */
 
-  /* The dark theme shadows need a bit of work, but this will probably also require work on the core layout
-   * colors used in the theme as well. */
   --jp-shadow-base-lightness: 32;
   --jp-shadow-umbra-color: rgba(
     var(--jp-shadow-base-lightness),
@@ -188,6 +186,11 @@ all of MD as it is not optimized for dense, information rich UIs.
   /* This gives a magnification of about 125% in presentation mode over normal. */
   --jp-code-presentation-font-size: 16px;
 
+  /* may need to tweak cursor width if you change font size */
+  --jp-code-cursor-width0: 1.4px;
+  --jp-code-cursor-width1: 2px;
+  --jp-code-cursor-width2: 4px;
+
   /* Layout
    *
    * The following are the main layout colors use in JupyterLab. In a light
@@ -266,7 +269,6 @@ all of MD as it is not optimized for dense, information rich UIs.
   --jp-cell-prompt-opacity: 1;
   --jp-cell-prompt-not-active-opacity: 1;
   --jp-cell-prompt-not-active-font-color: var(--md-grey-300);
-
   /* A custom blend of MD grey and blue 600
    * See https://meyerweb.com/eric/tools/color-blend/#546E7A:1E88E5:5:hex */
   --jp-cell-inprompt-font-color: #307fc1;
@@ -277,9 +279,12 @@ all of MD as it is not optimized for dense, information rich UIs.
   /* Notebook specific styles */
 
   --jp-notebook-padding: 10px;
-  --jp-notebook-scroll-padding: 100px;
   --jp-notebook-select-background: var(--jp-layout-color1);
   --jp-notebook-multiselected-color: rgba(33, 150, 243, 0.24);
+  --jp-notebook-scroll-padding: calc(
+    100% - var(--jp-code-font-size) * var(--jp-code-line-height) -
+      var(--jp-code-padding) - var(--jp-cell-padding) - 1px
+  );
 
   /* Rendermime styles */
 
@@ -317,7 +322,7 @@ all of MD as it is not optimized for dense, information rich UIs.
 
   --jp-editor-selected-background: var(--jp-layout-color2);
   --jp-editor-selected-focused-background: #B362FF88;
-  --jp-editor-cursor-color: var(--jp-ui-font-color0);
+  --jp-editor-cursor-color: rgba(255, 255, 255, 1);
 
   /* Code mirror specific styles */
 
@@ -353,6 +358,18 @@ all of MD as it is not optimized for dense, information rich UIs.
   /* Sidebar-related styles */
 
   --jp-sidebar-min-width: 180px;
+
+  /* Search-related styles */
+
+  --jp-search-toggle-off-opacity: 0.5;
+  --jp-search-toggle-hover-opacity: 0.8;
+  --jp-search-toggle-on-opacity: 1;
+  --jp-search-selected-match-background-color: rgb(245, 200, 0);
+  --jp-search-selected-match-color: black;
+  --jp-search-unselected-match-background-color: var(
+    --jp-inverse-layout-color0
+  );
+  --jp-search-unselected-match-color: var(--jp-ui-inverse-font-color0);
 }
 
 /*-----------------------------------------------------------------------------
