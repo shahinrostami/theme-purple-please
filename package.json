@@ -1,6 +1,6 @@
 {
   "name": "@shahinrostami/theme-purple-please",
-  "version": "0.1.0",
+  "version": "1.1.4",
   "description": "A JupyterLab theme extension which provides the Purple Please theme, inspired by the Shades of Purple theme from VSCode.",
   "author": "Dr. Shahin Rostami <hello@shahinrostami.com>",
   "keywords": [
@@ -30,13 +30,13 @@
     "watch:webpack": "webpack --watch"
   },
   "dependencies": {
-    "@jupyterlab/application": "^0.19.1",
-    "@jupyterlab/apputils": "^0.19.1"
+    "@jupyterlab/application": "^1.0.0",
+    "@jupyterlab/apputils": "^1.0.0"
   },
   "devDependencies": {
     "rimraf": "~2.6.2",
     "typedoc": "~0.12.0",
-    "typescript": "~3.1.1",
+    "typescript": "~3.3.1",
     "css-loader": "~0.28.7",
     "mini-css-extract-plugin": "~0.4.4",
     "svgo": "~1.0.4",
@@ -52,15 +52,14 @@
   },
   "jupyterlab": {
     "extension": true,
-    "themeDir": "style",
     "themePath": "style/index.css"
   },
-  "homepage": "http://github.com/shahinrostami/theme-purple-please",
+  "homepage": "https://shahinrostami.com",
   "bugs": {
-    "url": "http://github.com/shahinrostami/theme-purple-please/issues"
+    "url": ""
   },
   "repository": {
     "type": "git",
-    "url": "http://github.com/shahinrostami/theme-purple-please.git"
+    "url": ""
   }
 }

@@ -1,27 +1,24 @@
 import {
-  JupyterLab, JupyterLabPlugin
+  JupyterFrontEnd,
+  JupyterFrontEndPlugin
 } from '@jupyterlab/application';
 
-import {
-  IThemeManager
-} from '@jupyterlab/apputils';
+import { IThemeManager } from '@jupyterlab/apputils';
 
 /**
  * A plugin for @shahinrostami/theme-purple-please
  */
-const plugin: JupyterLabPlugin<void> = {
+const plugin: JupyterFrontEndPlugin<void> = {
   id: '@shahinrostami/theme-purple-please:plugin',
   requires: [IThemeManager],
-  activate: function(app: JupyterLab, manager: IThemeManager) {
+  activate: function(app: JupyterFrontEnd, manager: IThemeManager) {
+    const style = '@shahinrostami/theme-purple-please/index.css';
+
     manager.register({
       name: 'theme-purple-please',
       isLight: true,
-      load: function() {
-        return manager.loadCSS('@shahinrostami/theme-purple-please/index.css');
-      },
-      unload: function() {
-        return Promise.resolve(void 0);
-      }
+      load: () => manager.loadCSS(style),
+      unload: () => Promise.resolve(undefined)
     });
   },
   autoStart: true
