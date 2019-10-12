@@ -11,12 +11,13 @@ import { IThemeManager } from '@jupyterlab/apputils';
 const plugin: JupyterFrontEndPlugin<void> = {
   id: '@shahinrostami/theme-purple-please:plugin',
   requires: [IThemeManager],
-  activate: function(app: JupyterFrontEnd, manager: IThemeManager) {
+  activate: (app: JupyterFrontEnd, manager: IThemeManager) => {
     const style = '@shahinrostami/theme-purple-please/index.css';
 
     manager.register({
       name: 'theme-purple-please',
-      isLight: true,
+      isLight: false,
+      themeScrollbars: true,
       load: () => manager.loadCSS(style),
       unload: () => Promise.resolve(undefined)
     });
