@@ -1,3 +1,5 @@
+[![ko-fi](https://www.ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/L3L71J8NI)
+
 # @shahinrostami/theme-purple-please
 
 A JupyterLab theme extension which provides the Purple Please theme, inspired by the [shades-of-purple](https://github.com/ahmadawais/shades-of-purple-vscode) theme for VSCode.
