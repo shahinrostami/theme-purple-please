@@ -8,7 +8,7 @@ A JupyterLab theme extension which provides the Purple Please theme.
 
 ## Prerequisites
 
-- JupyterLab
+- JupyterLab (v1 or v2)
 
 ## Installation
 
