@@ -1,14 +1,14 @@
 # @shahinrostami/theme-purple-please
 
-A JupyterLab theme extension which provides the Purple Please theme, inspired by the [shades-of-purple](https://github.com/ahmadawais/shades-of-purple-vscode) theme for VSCode.
-
-**Note:** I put this together for myself for dealing with Python, it's essentially a modification of the default template. You may see some colours from the old template appear in cases I haven't encountered yet. Please raise an issue and I'll take a look.
+A JupyterLab theme extension which provides the Purple Please theme.
 
 ![Screenshot of Purple Please in action](screenshot.png)
 
+**Note:** I put this together for myself for dealing with Python, it's essentially a modification of the default template. You may see some colours from the old template appear in cases I haven't encountered yet. Please raise an issue and I'll take a look.
+
 ## Prerequisites
 
-* JupyterLab
+- JupyterLab
 
 ## Installation
 
@@ -31,3 +31,5 @@ To rebuild the package and the JupyterLab app:
 npm run build
 jupyter lab build
 ```
+
+Inspired by the [shades-of-purple](https://github.com/ahmadawais/shades-of-purple-vscode) theme for VSCode.
