@@ -17,7 +17,9 @@
 import * as React from "react";
 
 import { IconName } from "@blueprintjs/icons";
+
 import { Intent } from "./intent";
+import { IRef } from "./refs";
 
 export const DISPLAYNAME_PREFIX = "Blueprint3";
 
@@ -80,7 +82,11 @@ export interface ILinkProps {
     target?: string;
 }
 
-/** Interface for a controlled input. */
+/**
+ * @deprecated use IControlledProps2.
+ *
+ * Interface for a controlled input.
+ */
 export interface IControlledProps {
     /** Initial value of the input, for uncontrolled usage. */
     defaultValue?: string;
@@ -92,6 +98,18 @@ export interface IControlledProps {
     value?: string;
 }
 
+export interface IControlledProps2 {
+    /** Initial value of the input, for uncontrolled usage. */
+    defaultValue?: string;
+
+    /** Form value of the input, for controlled usage. */
+    value?: string;
+}
+
+export interface IElementRefProps<E extends HTMLElement> {
+    /** A ref handler or a ref object that receives the native HTML element rendered by this component. */
+    elementRef?: IRef<E>;
+}
 /**
  * An interface for an option in a list, such as in a `<select>` or `RadioGroup`.
  * These props can be spread directly to an `<option>` or `<Radio>` element.
@@ -111,6 +129,7 @@ export interface IOptionProps extends IProps {
 const INVALID_PROPS = [
     "active",
     "alignText",
+    "asyncControl", // IInputGroupProps2
     "containerRef",
     "current",
     "elementRef",
@@ -140,6 +159,7 @@ const INVALID_PROPS = [
  * Typically applied to HTMLElements to filter out disallowed props. When applied to a Component,
  * can filter props from being passed down to the children. Can also filter by a combined list of
  * supplied prop keys and the denylist (only appropriate for HTMLElements).
+ *
  * @param props The original props object to filter down.
  * @param {string[]} invalidProps If supplied, overwrites the default denylist.
  * @param {boolean} shouldMerge If true, will merge supplied invalidProps and denylist together.

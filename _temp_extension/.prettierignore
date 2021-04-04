@@ -1,0 +1,5 @@
+node_modules
+**/node_modules
+**/lib
+**/package.json
+shahinrostami_theme_purple_please

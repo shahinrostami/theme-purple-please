@@ -17,6 +17,7 @@ import classNames from "classnames";
 import * as React from "react";
 
 import {
+    AbstractPureComponent2,
     Classes as CoreClasses,
     DISPLAYNAME_PREFIX,
     IPopoverProps,
@@ -27,10 +28,12 @@ import {
     Position,
     TagInput,
     TagInputAddMethod,
-    Utils,
 } from "@blueprintjs/core";
+
 import { Classes, IListItemsProps } from "../../common";
 import { IQueryListRendererProps, QueryList } from "../query-list/queryList";
+
+// N.B. selectedItems should really be a required prop, but is left optional for backwards compatibility
 
 export interface IMultiSelectProps<T> extends IListItemsProps<T> {
     /**
@@ -38,6 +41,16 @@ export interface IMultiSelectProps<T> extends IListItemsProps<T> {
      * This overrides `popoverProps.fill` and `tagInputProps.fill`.
      */
     fill?: boolean;
+
+    /**
+     * Callback invoked when an item is removed from the selection by
+     * removing its tag in the TagInput. This is generally more useful than
+     * `tagInputProps.onRemove`  because it receives the removed value instead of
+     * the value's rendered `ReactNode` tag.
+     *
+     * It is not recommended to supply _both_ this prop and `tagInputProps.onRemove`.
+     */
+    onRemove?: (value: T, index: number) => void;
 
     /**
      * If true, the component waits until a keydown event in the TagInput
@@ -55,6 +68,7 @@ export interface IMultiSelectProps<T> extends IListItemsProps<T> {
 
     /**
      * Input placeholder text. Shorthand for `tagInputProps.placeholder`.
+     *
      * @default "Search..."
      */
     placeholder?: string;
@@ -78,7 +92,7 @@ export interface IMultiSelectState {
     isOpen: boolean;
 }
 
-export class MultiSelect<T> extends React.PureComponent<IMultiSelectProps<T>, IMultiSelectState> {
+export class MultiSelect<T> extends AbstractPureComponent2<IMultiSelectProps<T>, IMultiSelectState> {
     public static displayName = `${DISPLAYNAME_PREFIX}.MultiSelect`;
 
     public static defaultProps = {
@@ -86,8 +100,8 @@ export class MultiSelect<T> extends React.PureComponent<IMultiSelectProps<T>, IM
         placeholder: "Search...",
     };
 
-    public static ofType<T>() {
-        return MultiSelect as new (props: IMultiSelectProps<T>) => MultiSelect<T>;
+    public static ofType<U>() {
+        return MultiSelect as new (props: IMultiSelectProps<U>) => MultiSelect<U>;
     }
 
     public state: IMultiSelectState = {
@@ -95,12 +109,15 @@ export class MultiSelect<T> extends React.PureComponent<IMultiSelectProps<T>, IM
     };
 
     private TypedQueryList = QueryList.ofType<T>();
+
     private input: HTMLInputElement | null = null;
+
     private queryList: QueryList<T> | null = null;
+
     private refHandlers = {
         input: (ref: HTMLInputElement | null) => {
             this.input = ref;
-            Utils.safeInvokeMember(this.props.tagInputProps, "inputRef", ref);
+            this.props.tagInputProps?.inputRef?.(ref);
         },
         queryList: (ref: QueryList<T> | null) => (this.queryList = ref),
     };
@@ -142,6 +159,7 @@ export class MultiSelect<T> extends React.PureComponent<IMultiSelectProps<T>, IM
         };
 
         return (
+            /* eslint-disable-next-line deprecation/deprecation */
             <Popover
                 autoFocus={false}
                 canEscapeKeyClose={true}
@@ -166,14 +184,17 @@ export class MultiSelect<T> extends React.PureComponent<IMultiSelectProps<T>, IM
                         inputRef={this.refHandlers.input}
                         inputProps={inputProps}
                         inputValue={listProps.query}
+                        /* eslint-disable-next-line react/jsx-no-bind */
                         onAdd={handleTagInputAdd}
                         onInputChange={listProps.handleQueryChange}
+                        onRemove={this.handleTagRemove}
                         values={selectedItems.map(this.props.tagRenderer)}
                     />
                 </div>
                 <div onKeyDown={handleKeyDown} onKeyUp={handleKeyUp}>
                     {listProps.itemList}
                 </div>
+                {/* eslint-disable-next-line deprecation/deprecation */}
             </Popover>
         );
     };
@@ -182,18 +203,18 @@ export class MultiSelect<T> extends React.PureComponent<IMultiSelectProps<T>, IM
         if (this.input != null) {
             this.input.focus();
         }
-        Utils.safeInvoke(this.props.onItemSelect, item, evt);
+        this.props.onItemSelect?.(item, evt);
     };
 
     private handleQueryChange = (query: string, evt?: React.ChangeEvent<HTMLInputElement>) => {
         this.setState({ isOpen: query.length > 0 || !this.props.openOnKeyDown });
-        Utils.safeInvoke(this.props.onQueryChange, query, evt);
+        this.props.onQueryChange?.(query, evt);
     };
 
     // Popover interaction kind is CLICK, so this only handles click events.
     // Note that we defer to the next animation frame in order to get the latest document.activeElement
     private handlePopoverInteraction = (nextOpenState: boolean) =>
-        requestAnimationFrame(() => {
+        this.requestAnimationFrame(() => {
             const isInputFocused = this.input === document.activeElement;
 
             if (this.input != null && !isInputFocused) {
@@ -212,7 +233,13 @@ export class MultiSelect<T> extends React.PureComponent<IMultiSelectProps<T>, IM
             // scroll active item into view after popover transition completes and all dimensions are stable.
             this.queryList.scrollActiveItemIntoView();
         }
-        Utils.safeInvokeMember(this.props.popoverProps, "onOpened", node);
+        this.props.popoverProps?.onOpened?.(node);
+    };
+
+    private handleTagRemove = (tag: React.ReactNode, index: number) => {
+        const { selectedItems = [], onRemove, tagInputProps } = this.props;
+        onRemove?.(selectedItems[index], index);
+        tagInputProps?.onRemove?.(tag, index);
     };
 
     private getTagInputKeyDownHandler = (handleQueryListKeyDown: React.KeyboardEventHandler<HTMLElement>) => {
@@ -235,7 +262,7 @@ export class MultiSelect<T> extends React.PureComponent<IMultiSelectProps<T>, IM
             const isTargetingTagRemoveButton = (e.target as HTMLElement).closest(`.${CoreClasses.TAG_REMOVE}`) != null;
 
             if (this.state.isOpen && !isTargetingTagRemoveButton) {
-                Utils.safeInvoke(handleQueryListKeyDown, e);
+                handleQueryListKeyDown?.(e);
             }
         };
     };
@@ -247,7 +274,7 @@ export class MultiSelect<T> extends React.PureComponent<IMultiSelectProps<T>, IM
             // only handle events when the focus is on the actual <input> inside the TagInput, as that's
             // what QueryList is designed to do
             if (this.state.isOpen && isTargetingInput) {
-                Utils.safeInvoke(handleQueryListKeyUp, e);
+                handleQueryListKeyUp?.(e);
             }
         };
     };
