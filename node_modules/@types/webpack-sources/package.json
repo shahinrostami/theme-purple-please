@@ -1,0 +1,34 @@
+{
+    "name": "@types/webpack-sources",
+    "version": "0.1.9",
+    "description": "TypeScript definitions for webpack-sources",
+    "homepage": "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/webpack-sources",
+    "license": "MIT",
+    "contributors": [
+        {
+            "name": "e-cloud",
+            "url": "https://github.com/e-cloud",
+            "githubUsername": "e-cloud"
+        },
+        {
+            "name": "Chris Eppstein",
+            "url": "https://github.com/chriseppstein",
+            "githubUsername": "chriseppstein"
+        }
+    ],
+    "main": "",
+    "types": "index.d.ts",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/DefinitelyTyped/DefinitelyTyped.git",
+        "directory": "types/webpack-sources"
+    },
+    "scripts": {},
+    "dependencies": {
+        "@types/node": "*",
+        "@types/source-list-map": "*",
+        "source-map": "^0.6.1"
+    },
+    "typesPublisherContentHash": "2f6824e3ab2a4c3f20b781ec6d29738b29afd7edf09d1e1dfd30221beaa37d4a",
+    "typeScriptVersion": "3.6"
+}

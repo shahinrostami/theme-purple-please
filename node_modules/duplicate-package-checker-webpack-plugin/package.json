@@ -1,0 +1,51 @@
+{
+  "name": "duplicate-package-checker-webpack-plugin",
+  "version": "3.0.0",
+  "description":
+    "Webpack plugin that warns you when multiple versions of the same package exist in a build.",
+  "main": "./lib/index.js",
+  "scripts": {
+    "test": "jest test/**/*.test.js --runInBand",
+    "build": "babel src --out-dir lib",
+    "prepublish": "npm run build",
+    "precommit": "lint-staged",
+    "pretty": "prettier --write \"src/**/*.{json,js}\" \"test/**/*.{json,js}\""
+  },
+  "lint-staged": {
+    "*.{js,json}": ["prettier --write", "git add"]
+  },
+  "dependencies": {
+    "chalk": "^2.3.0",
+    "find-root": "^1.0.0",
+    "lodash": "^4.17.4",
+    "semver": "^5.4.1"
+  },
+  "jest": {
+    "testEnvironment": "node"
+  },
+  "repository": {
+    "type": "git",
+    "url":
+      "git+https://github.com/darrenscerri/duplicate-package-checker-webpack-plugin.git"
+  },
+  "keywords": ["webpack", "plugin"],
+  "author": "Darren Scerri <darrenscerri@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url":
+      "https://github.com/darrenscerri/duplicate-package-checker-webpack-plugin/issues"
+  },
+  "homepage":
+    "https://github.com/darrenscerri/duplicate-package-checker-webpack-plugin#readme",
+  "devDependencies": {
+    "babel-cli": "^6.24.0",
+    "babel-core": "^6.24.0",
+    "babel-polyfill": "^6.23.0",
+    "babel-preset-es2015": "^6.24.0",
+    "husky": "^0.14.3",
+    "jest": "^22.4.2",
+    "lint-staged": "^5.0.0",
+    "prettier": "^1.11.1",
+    "webpack": "^4.1.1"
+  }
+}

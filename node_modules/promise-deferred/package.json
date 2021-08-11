@@ -1,0 +1,76 @@
+{
+	"name": "promise-deferred",
+	"version": "2.0.3",
+	"description": "A lightweight Deferred implementation, on top of Promises/A+",
+	"main": "index.js",
+	"scripts": {
+		"pretest": "npm run lint",
+		"tests-only": "node test",
+		"test": "npm run tests-only && npm run coverage",
+		"posttest": "npx aud",
+		"coverage": "covert test/index.js",
+		"lint": "eslint .",
+		"version": "auto-changelog && git add CHANGELOG.md",
+		"postversion": "auto-changelog && git add CHANGELOG.md && git commit --no-edit --amend && git tag -f \"v$(node -e \"console.log(require('./package.json').version)\")\""
+	},
+	"repository": {
+		"type": "git",
+		"url": "git://github.com/ljharb/promise-deferred.git"
+	},
+	"keywords": [
+		"promise",
+		"promises",
+		"deferred",
+		"deferreds",
+		"reject",
+		"resolve",
+		"async"
+	],
+	"author": "Jordan Harband",
+	"funding": {
+		"url": "https://github.com/sponsors/ljharb"
+	},
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/ljharb/promise-deferred/issues"
+	},
+	"homepage": "https://github.com/ljharb/promise-deferred",
+	"testling": {
+		"files": "test/index.js",
+		"browsers": [
+			"iexplore/6.0..latest",
+			"firefox/3.0..6.0",
+			"firefox/15.0..latest",
+			"firefox/nightly",
+			"chrome/4.0..10.0",
+			"chrome/20.0..latest",
+			"chrome/canary",
+			"opera/10.0..latest",
+			"opera/next",
+			"safari/4.0..latest",
+			"ipad/6.0..latest",
+			"iphone/6.0..latest",
+			"android-browser/4.2"
+		]
+	},
+	"dependencies": {
+		"promise": "^7.3.1"
+	},
+	"devDependencies": {
+		"@ljharb/eslint-config": "^15.1.0",
+		"auto-changelog": "^1.16.2",
+		"covert": "^1.1.1",
+		"eslint": "^6.8.0",
+		"tape": "^5.0.0-next.3"
+	},
+	"engines": {
+		"node": ">= 0.4"
+	},
+	"auto-changelog": {
+		"output": "CHANGELOG.md",
+		"template": "keepachangelog",
+		"unreleased": false,
+		"commitLimit": false,
+		"backfillLimit": false
+	}
+}

@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+      "outDir": "./dist",
+      "pretty": true,
+      "target": "es2017",
+      "lib": [
+        "es2017",
+      ],
+      "module": "commonjs",
+      "allowJs": false,
+      "sourceMap": true,
+      "strict": true,
+      "declaration": true,
+      "importHelpers": true,
+  },
+  "include": [
+      "./lib/**/*"
+  ]
+}

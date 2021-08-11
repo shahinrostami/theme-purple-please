@@ -1,0 +1,39 @@
+{
+  "name": "clipanion",
+  "version": "2.6.2",
+  "main": "lib/index",
+  "license": "MIT",
+  "repository": {
+    "url": "https://github.com/arcanis/clipanion",
+    "type": "git"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.2.11",
+    "@types/chai-as-promised": "^7.1.2",
+    "@types/mocha": "^7.0.2",
+    "@types/node": "^14.0.13",
+    "@types/yup": "^0.29.3",
+    "@wessberg/rollup-plugin-ts": "^1.2.25",
+    "chai": "^4.2.0",
+    "chai-as-promised": "^7.1.1",
+    "get-stream": "^5.1.0",
+    "mocha": "^8.0.1",
+    "rollup": "^2.16.1",
+    "ts-node": "^8.10.2",
+    "tslib": "^2.0.0",
+    "typescript": "^4.0.3",
+    "yup": "^0.29.1"
+  },
+  "scripts": {
+    "prepack": "rm -rf lib && rollup -c",
+    "postpack": "rm -rf lib",
+    "test": "FORCE_COLOR=1 mocha --require ts-node/register --extension ts tests",
+    "demo": "node --require ts-node/register sources/demos/advanced.ts"
+  },
+  "publishConfig": {
+    "main": "lib/index"
+  },
+  "files": [
+    "lib"
+  ]
+}

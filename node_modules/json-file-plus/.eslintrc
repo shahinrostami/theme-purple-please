@@ -1,0 +1,12 @@
+{
+	"root": true,
+
+	"extends": "@ljharb",
+
+	"rules": {
+		"dot-notation": [2, { "allowKeywords": false }],
+		"func-name-matching": 1,
+		"no-magic-numbers": 0,
+		"no-param-reassign": 1
+	}
+}

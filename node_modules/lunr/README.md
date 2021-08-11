@@ -2,7 +2,7 @@
 
 [![Join the chat at https://gitter.im/olivernn/lunr.js](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/olivernn/lunr.js?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-[![Build Status](https://travis-ci.org/olivernn/lunr.js.png?branch=master)](https://travis-ci.org/olivernn/lunr.js)
+[![Build Status](https://travis-ci.org/olivernn/lunr.js.svg?branch=master)](https://travis-ci.org/olivernn/lunr.js)
 
 A bit like Solr, but much smaller and not as bright.
 
@@ -24,7 +24,7 @@ var idx = lunr(function () {
 })
 ```
 
-Then searching is as simple:
+Then searching is as simple as:
 
 ```javascript
 idx.search("love")
@@ -56,7 +56,7 @@ Lunr.js is a small, full-text search library for use in the browser.  It indexes
 
 ## Why
 
-For web applications with all their data already sitting in the client, it makes sense to be able to search that data on the client too.  It saves adding extra, compacted services on the server.  A local search index will be quicker, there is no network overhead, and will remain available and useable even without a network connection.
+For web applications with all their data already sitting in the client, it makes sense to be able to search that data on the client too.  It saves adding extra, compacted services on the server.  A local search index will be quicker, there is no network overhead, and will remain available and usable even without a network connection.
 
 ## Installation
 

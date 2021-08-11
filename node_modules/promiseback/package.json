@@ -1,0 +1,69 @@
+{
+	"name": "promiseback",
+	"version": "2.0.3",
+	"description": "Accept an optional node-style callback, and also return a spec-compliant Promise!",
+	"main": "index.js",
+	"scripts": {
+		"prepublish": "safe-publish-latest",
+		"pretest": "npm run lint",
+		"tests-only": "node test",
+		"test": "npm run tests-only && npm run coverage -- --quiet",
+		"posttest": "npx aud",
+		"coverage": "covert test/index.js",
+		"lint": "eslint ."
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/ljharb/promiseback"
+	},
+	"keywords": [
+		"promiseback",
+		"promisebacks",
+		"promise",
+		"promises",
+		"callback",
+		"callbacks"
+	],
+	"author": "Jordan Harband",
+	"funding": {
+		"url": "https://github.com/sponsors/ljharb"
+	},
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/ljharb/promiseback/issues"
+	},
+	"homepage": "https://github.com/ljharb/promiseback",
+	"testling": {
+		"files": "test/index.js",
+		"browsers": [
+			"iexplore/6.0..latest",
+			"firefox/3.0..6.0",
+			"firefox/15.0..latest",
+			"firefox/nightly",
+			"chrome/4.0..10.0",
+			"chrome/20.0..latest",
+			"chrome/canary",
+			"opera/10.0..latest",
+			"opera/next",
+			"safari/4.0..latest",
+			"ipad/6.0..latest",
+			"iphone/6.0..latest",
+			"android-browser/4.2"
+		]
+	},
+	"dependencies": {
+		"is-callable": "^1.1.5",
+		"promise-deferred": "^2.0.3"
+	},
+	"devDependencies": {
+		"@ljharb/eslint-config": "^15.1.0",
+		"covert": "^1.1.1",
+		"eslint": "^6.8.0",
+		"foreach": "^2.0.5",
+		"safe-publish-latest": "^1.1.4",
+		"tape": "^5.0.0-next.3"
+	},
+	"engines": {
+		"node": ">= 0.4"
+	}
+}

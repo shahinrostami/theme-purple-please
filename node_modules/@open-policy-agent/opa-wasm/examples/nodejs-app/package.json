@@ -1,0 +1,11 @@
+{
+  "name": "nodejs-app",
+  "version": "1.0.0",
+  "description": "demo app",
+  "main": "app.js",
+  "scripts": {},
+  "dependencies": {
+    "@open-policy-agent/opa-wasm": "file:../../"
+  },
+  "license": "Apache-2.0"
+}

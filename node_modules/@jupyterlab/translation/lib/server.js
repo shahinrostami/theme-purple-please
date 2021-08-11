@@ -1,0 +1,38 @@
+// Copyright (c) Jupyter Development Team.
+// Distributed under the terms of the Modified BSD License.
+import { URLExt } from '@jupyterlab/coreutils';
+import { ServerConnection } from '@jupyterlab/services';
+/**
+ * Call the API extension
+ *
+ * @param locale API REST end point for the extension
+ * @param init Initial values for the request
+ * @returns The response body interpreted as JSON
+ */
+export async function requestTranslationsAPI(translationsUrl = '', locale = '', init = {}) {
+    // Make request to Jupyter API
+    const settings = ServerConnection.makeSettings();
+    translationsUrl = translationsUrl || `${settings.appUrl}/api/translations/`;
+    const requestUrl = URLExt.join(settings.baseUrl, translationsUrl, locale);
+    let response;
+    try {
+        response = await ServerConnection.makeRequest(requestUrl, init, settings);
+    }
+    catch (error) {
+        throw new ServerConnection.NetworkError(error);
+    }
+    let data = await response.text();
+    if (data.length > 0) {
+        try {
+            data = JSON.parse(data);
+        }
+        catch (error) {
+            console.error('Not a JSON response body.', response);
+        }
+    }
+    if (!response.ok) {
+        throw new ServerConnection.ResponseError(response, data.message || data);
+    }
+    return data;
+}
+//# sourceMappingURL=server.js.map

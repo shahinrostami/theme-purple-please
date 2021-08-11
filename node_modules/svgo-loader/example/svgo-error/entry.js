@@ -1,1 +1,0 @@
-require('./SVG_logo_malformed.svg');

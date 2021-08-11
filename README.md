@@ -1,3 +1,5 @@
+![Plotapi](https://newsletter.datacrayon.com/uploads/1500x500.jpeg)
+
 # @shahinrostami/theme-purple-please
 
 A JupyterLab theme extension which provides the Purple Please theme.
@@ -6,9 +8,13 @@ A JupyterLab theme extension which provides the Purple Please theme.
 
 **Note:** I put this together for myself for dealing with Python, it's essentially a modification of the default template. You may see some colours from the old template appear in cases I haven't encountered yet. Please raise an issue and I'll take a look.
 
+## Funding
+
+Please consider sponsoring this work with [Github Sponsor https://github.com/sponsors/shahinrostami](https://github.com/sponsors/shahinrostami).
+
 ## Prerequisites
 
-- JupyterLab (v1 or v2)
+- JupyterLab (v1, v2, or v3)
 
 ## Installation
 

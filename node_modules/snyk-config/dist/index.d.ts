@@ -1,0 +1,9 @@
+export declare type Json = string | number | boolean | null | {
+    [property: string]: Json;
+} | Json[];
+export interface Options {
+    secretConfig?: string;
+}
+export declare function loadConfig(dir?: string, options?: Options): {
+    [property: string]: Json;
+};

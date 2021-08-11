@@ -1,0 +1,41 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.display = void 0;
+const chalk_1 = require("chalk");
+const snyk_policy_1 = require("snyk-policy");
+const config = require("./config");
+async function display(policy) {
+    const p = snyk_policy_1.demunge(policy, config.ROOT);
+    let res = chalk_1.default.bold('Current Snyk policy, read from ' + policy.__filename + ' file') + '\n';
+    res += 'Modified: ' + policy.__modified + '\n';
+    res += 'Created:  ' + policy.__created + '\n';
+    res += p.patch.map(displayRule('Patch vulnerability')).join('\n');
+    if (p.patch.length && p.ignore.length) {
+        res += '\n\n------------------------\n';
+    }
+    res += p.ignore.map(displayRule('Ignore')).join('\n');
+    return Promise.resolve(res);
+}
+exports.display = display;
+function displayRule(title) {
+    return (rule, i) => {
+        i += 1;
+        return (chalk_1.default.bold('\n#' + i + ' ' + title + ' ' + rule.url) +
+            ' in the following paths:\n' +
+            rule.paths
+                .map((p) => {
+                return (p.path +
+                    (p.reason
+                        ? '\nReason: ' +
+                            p.reason +
+                            '\nExpires: ' +
+                            p.expires.toUTCString() +
+                            '\n'
+                        : '') +
+                    '\n');
+            })
+                .join('')
+                .replace(/\s*$/, ''));
+    };
+}
+//# sourceMappingURL=display-policy.js.map

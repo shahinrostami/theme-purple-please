@@ -1,0 +1,74 @@
+allprojects { everyProj ->
+
+    task printClasspath {
+        doLast {
+            def classPath = [].toSet();
+
+            pluginManager.withPlugin('java') {
+                classPath = sourceSets.main.runtimeClasspath.asPath
+            }
+
+            if (!classPath) {
+                pluginManager.withPlugin('android') {
+                    def androidBootClasspath = android.getBootClasspath()[0]
+                    def cp = [androidBootClasspath];
+
+                    def confAttrSpec = [:]
+                    def configuredDimensionList = []
+                    if (project.hasProperty('confAttrs')) {
+                        confAttrSpec = confAttrs.toLowerCase().split(',').collectEntries { [(it.split(':')[0]) : it.split(':')[1]] }
+                        configuredDimensionList = android.flavorDimensionList.findAll { confAttrSpec[it] }
+                    }
+
+                    project.android.applicationVariants.all { v ->
+                        // remove classpath for unused buildTypes
+                        if (confAttrSpec['buildtype'] && v.buildType.getName() != confAttrSpec['buildtype']) {
+                           return
+                        }
+
+                        // remove classpath for unused dimensions
+                        if (configuredDimensionList) {
+                          def usedFlavors = configuredDimensionList.findAll {
+                             v.flavorName.toLowerCase() == confAttrSpec[it]
+                          }
+                          if (!usedFlavors) {
+                              return;
+                          }
+                        }
+
+                        v.getCompileClasspath(null).getFiles().each {
+                            File f ->
+                                cp.add(f.getAbsolutePath())
+                        }
+                        v.javaCompile.classpath.getFiles().each {
+                            f -> cp.add(f)
+                        }
+
+                        cp.add(v.javaCompile.destinationDir.getAbsolutePath())
+                    }
+                    classPath = cp.join(":")
+                }
+            }
+
+            /*
+            the `snykReachabilityClasspath` can be declared using a `ext` block
+            in the projects build script
+
+            e.g for java:
+
+            ext {
+                snykReachabilityClasspath = sourceSets.main.compileClasspath.asPath
+            }
+
+            It requires a path formatted string, e.g:
+
+
+             */
+            if (!classPath && project.hasProperty('snykReachabilityClasspath')) {
+                classPath = project.snykReachabilityClasspath
+            }
+
+            if (classPath) println(classPath)
+        }
+    }
+}

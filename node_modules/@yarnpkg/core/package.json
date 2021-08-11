@@ -1,0 +1,73 @@
+{
+  "name": "@yarnpkg/core",
+  "version": "2.4.0",
+  "license": "BSD-2-Clause",
+  "main": "./lib/index.js",
+  "sideEffects": false,
+  "dependencies": {
+    "@arcanis/slice-ansi": "^1.0.2",
+    "@types/semver": "^7.1.0",
+    "@types/treeify": "^1.0.0",
+    "@yarnpkg/fslib": "^2.4.0",
+    "@yarnpkg/json-proxy": "^2.1.0",
+    "@yarnpkg/libzip": "^2.2.1",
+    "@yarnpkg/parsers": "^2.3.0",
+    "@yarnpkg/pnp": "^2.3.2",
+    "@yarnpkg/shell": "^2.4.1",
+    "binjumper": "^0.1.4",
+    "camelcase": "^5.3.1",
+    "chalk": "^3.0.0",
+    "ci-info": "^2.0.0",
+    "clipanion": "^2.6.2",
+    "cross-spawn": "7.0.3",
+    "diff": "^4.0.1",
+    "globby": "^11.0.1",
+    "got": "^11.7.0",
+    "json-file-plus": "^3.3.1",
+    "lodash": "^4.17.15",
+    "micromatch": "^4.0.2",
+    "mkdirp": "^0.5.1",
+    "p-limit": "^2.2.0",
+    "pluralize": "^7.0.0",
+    "pretty-bytes": "^5.1.0",
+    "semver": "^7.1.2",
+    "stream-to-promise": "^2.2.0",
+    "tar-stream": "^2.0.1",
+    "treeify": "^1.1.0",
+    "tslib": "^1.13.0",
+    "tunnel": "^0.0.6"
+  },
+  "devDependencies": {
+    "@types/ci-info": "^2",
+    "@types/cross-spawn": "6.0.0",
+    "@types/diff": "^4.0.2",
+    "@types/lodash": "^4.14.136",
+    "@types/micromatch": "^4.0.1",
+    "@types/node": "^13.7.0",
+    "@types/tar-stream": "1.6.0",
+    "@types/tunnel": "^0.0.0",
+    "@yarnpkg/cli": "^2.4.0",
+    "@yarnpkg/plugin-link": "^2.1.1",
+    "@yarnpkg/plugin-npm": "^2.4.0",
+    "@yarnpkg/plugin-pnp": "^2.4.0"
+  },
+  "scripts": {
+    "postpack": "rm -rf lib",
+    "prepack": "run build:compile \"$(pwd)\""
+  },
+  "publishConfig": {
+    "main": "./lib/index.js",
+    "types": "./lib/index.d.ts"
+  },
+  "files": [
+    "/lib/**/*"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "ssh://git@github.com/yarnpkg/berry.git"
+  },
+  "engines": {
+    "node": ">=10.19.0"
+  },
+  "types": "./lib/index.d.ts"
+}

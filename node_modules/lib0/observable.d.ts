@@ -1,0 +1,39 @@
+/**
+ * Handles named events.
+ *
+ * @template N
+ */
+export class Observable<N> {
+    /**
+     * Some desc.
+     * @type {Map<N, any>}
+     */
+    _observers: Map<N, any>;
+    /**
+     * @param {N} name
+     * @param {function} f
+     */
+    on(name: N, f: Function): void;
+    /**
+     * @param {N} name
+     * @param {function} f
+     */
+    once(name: N, f: Function): void;
+    /**
+     * @param {N} name
+     * @param {function} f
+     */
+    off(name: N, f: Function): void;
+    /**
+     * Emit a named event. All registered event listeners that listen to the
+     * specified name will receive the event.
+     *
+     * @todo This should catch exceptions
+     *
+     * @param {N} name The event name.
+     * @param {Array<any>} args The arguments that are applied to the event listener.
+     */
+    emit(name: N, args: Array<any>): void;
+    destroy(): void;
+}
+//# sourceMappingURL=observable.d.ts.map

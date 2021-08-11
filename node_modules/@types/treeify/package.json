@@ -1,0 +1,23 @@
+{
+    "name": "@types/treeify",
+    "version": "1.0.0",
+    "description": "TypeScript definitions for treeify",
+    "license": "MIT",
+    "contributors": [
+        {
+            "name": "Mike North",
+            "url": "https://github.com/mike-north",
+            "githubUsername": "mike-north"
+        }
+    ],
+    "main": "",
+    "types": "index",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/DefinitelyTyped/DefinitelyTyped.git"
+    },
+    "scripts": {},
+    "dependencies": {},
+    "typesPublisherContentHash": "3c9c59ac257ddf8ca1b3bff8a1e53c0c6233d7f89d1338653363a1136e9640bd",
+    "typeScriptVersion": "2.1"
+}

@@ -1,0 +1,1 @@
+{"version":3,"file":"invalid-endpoint-config-error.js","sourceRoot":"","sources":["../../../src/lib/errors/invalid-endpoint-config-error.ts"],"names":[],"mappings":";;;AAAA,iDAA6C;AAE7C,MAAa,0BAA2B,SAAQ,0BAAW;IAIzD;QACE,KAAK,CAAC,0BAA0B,CAAC,aAAa,CAAC,CAAC;IAClD,CAAC;;AANH,gEAOC;AANgB,wCAAa,GAC1B,6IAA6I,CAAC"}

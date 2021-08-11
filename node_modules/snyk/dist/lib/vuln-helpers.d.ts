@@ -1,0 +1,10 @@
+export declare function isNewVuln(vuln: any): boolean;
+export declare function isFixable(testResult: any): boolean;
+export declare function hasFixes(testResults: any[]): boolean;
+export declare function isUpgradable(testResult: any): boolean;
+export declare function hasUpgrades(testResults: any[]): boolean;
+export declare function isPatchable(testResult: any): boolean;
+export declare function hasPatches(testResults: any[]): boolean;
+export declare function isVulnUpgradable(vuln: any): any;
+export declare function isVulnPatchable(vuln: any): any;
+export declare function isVulnFixable(vuln: any): any;

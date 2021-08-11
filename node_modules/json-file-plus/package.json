@@ -1,0 +1,67 @@
+{
+	"name": "json-file-plus",
+	"version": "3.3.1",
+	"author": {
+		"name": "Jordan Harband",
+		"email": "ljharb@gmail.com",
+		"url": "http://ljharb.codes"
+	},
+	"contributors": [
+		{
+			"name": "Jordan Harband",
+			"email": "ljharb@gmail.com",
+			"url": "http://ljharb.codes"
+		}
+	],
+	"description": "Read from and write to a JSON file, minimizing diffs and preserving formatting.",
+	"license": "MIT",
+	"main": "index.js",
+	"scripts": {
+		"pretest": "npm run --silent lint",
+		"test": "npm run --silent tests-only",
+		"tests-only": "node test/test.js",
+		"posttest": "npm run --silent security",
+		"coverage": "covert test/test.js",
+		"coverage-quiet": "covert test/test.js --quiet",
+		"prelint": "evalmd README.md",
+		"lint": "npm run --silent jscs && npm run --silent eslint",
+		"eslint": "eslint *.js test/*.js",
+		"jscs": "jscs *.js test/*.js",
+		"security": "nsp check"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git://github.com/ljharb/json-file-plus.git"
+	},
+	"keywords": [
+		"json",
+		"json file",
+		"formatting",
+		"read",
+		"write",
+		"promise",
+		"promiseback"
+	],
+	"dependencies": {
+		"is": "^3.2.1",
+		"node.extend": "^2.0.0",
+		"object.assign": "^4.1.0",
+		"promiseback": "^2.0.2",
+		"safer-buffer": "^2.0.2"
+	},
+	"devDependencies": {
+		"@ljharb/eslint-config": "^12.2.1",
+		"covert": "^1.1.0",
+		"eslint": "^4.19.0",
+		"evalmd": "^0.0.17",
+		"foreach": "^2.0.5",
+		"has": "^1.0.1",
+		"jscs": "^3.0.7",
+		"nsp": "^3.2.1",
+		"object-keys": "^1.0.11",
+		"tape": "^4.9.0"
+	},
+	"engines": {
+		"node": ">= 0.4"
+	}
+}

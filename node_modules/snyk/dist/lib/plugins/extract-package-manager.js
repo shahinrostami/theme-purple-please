@@ -1,0 +1,20 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.extractPackageManager = void 0;
+function extractPackageManager(scannedProject, pluginRes, options) {
+    // try and use the package Manager from the plugin
+    // result if present
+    const packageManager = scannedProject.packageManager ||
+        (pluginRes.plugin && pluginRes.plugin.packageManager);
+    if (packageManager) {
+        return packageManager;
+    }
+    if (!packageManager && options.packageManager) {
+        // fallback to Options packageManager
+        return options.packageManager;
+    }
+    // for example: docker
+    return undefined;
+}
+exports.extractPackageManager = extractPackageManager;
+//# sourceMappingURL=extract-package-manager.js.map

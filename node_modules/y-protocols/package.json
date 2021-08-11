@@ -1,0 +1,81 @@
+{
+  "name": "y-protocols",
+  "version": "1.0.5",
+  "description": "Yjs encoding protocols",
+  "type": "module",
+  "funding": {
+    "type": "GitHub Sponsors ❤",
+    "url": "https://github.com/sponsors/dmonad"
+  },
+  "files": [
+    "dist/*",
+    "auth.*",
+    "sync.*",
+    "awareness.*"
+  ],
+  "scripts": {
+    "clean": "rm -rf dist *.d.ts */*.d.ts *.d.ts.map */*.d.ts.map",
+    "dist": "rm -rf dist && rollup -c",
+    "test": "npm run lint && npm run dist && node dist/test.cjs",
+    "lint": "standard && tsc",
+    "types": "tsc --outDir .",
+    "debug": "rollup -c && concurrently 'rollup -wc' 'http-server -o test.html'",
+    "preversion": "npm run dist && npm run test && npm run types",
+    "postpublish": "npm run clean"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yjs/y-protocols.git"
+  },
+  "keywords": [
+    "Yjs"
+  ],
+  "author": "Kevin Jahns <kevin.jahns@protonmail.com>",
+  "license": "MIT",
+  "standard": {
+    "ignore": [
+      "/dist",
+      "/node_modules"
+    ]
+  },
+  "bugs": {
+    "url": "https://github.com/yjs/y-protocols/issues"
+  },
+  "homepage": "https://github.com/yjs/y-protocols#readme",
+  "exports": {
+    "./package.json": "./package.json",
+    "./sync.js": "./sync.js",
+    "./dist/sync.cjs": "./dist/sync.cjs",
+    "./sync": {
+      "import": "./sync.js",
+      "require": "./dist/sync.cjs"
+    },
+    "./awareness.js": "./awareness.js",
+    "./dist/awareness.cjs": "./dist/awareness.cjs",
+    "./awareness": {
+      "import": "./awareness.js",
+      "require": "./dist/awareness.cjs"
+    },
+    "./auth.js": "./auth.js",
+    "./dist/auth.cjs": "./dist/auth.cjs",
+    "./auth": {
+      "import": "./auth.js",
+      "require": "./dist/auth.cjs"
+    }
+  },
+  "dependencies": {
+    "lib0": "^0.2.42"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^17.1.0",
+    "@rollup/plugin-node-resolve": "^11.2.1",
+    "concurrently": "^5.3.0",
+    "rollup": "^2.48.0",
+    "standard": "^12.0.1",
+    "typescript": "^4.2.4",
+    "yjs": "^13.5.6"
+  },
+  "peerDependenies": {
+    "yjs": "^13.0.0"
+  }
+}

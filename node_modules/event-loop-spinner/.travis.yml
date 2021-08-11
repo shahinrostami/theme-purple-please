@@ -1,0 +1,24 @@
+sudo: false
+dist: bionic
+notifications:
+  email: false
+language: node_js
+cache: npm
+node_js:
+  - "10"
+  - "12"
+install:
+  - npm install
+script:
+  - npm run lint
+  - npm run test
+jobs:
+  include:
+    - stage: npm release
+      script: skip
+      node_js: "10"
+      after_success:
+        - npx semantic-release@15
+branches:
+  only:
+    - master

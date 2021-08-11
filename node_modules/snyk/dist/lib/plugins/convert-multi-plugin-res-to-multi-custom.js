@@ -1,0 +1,15 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.convertMultiResultToMultiCustom = void 0;
+const convert_scanned_projects_to_custom_1 = require("./convert-scanned-projects-to-custom");
+function convertMultiResultToMultiCustom(inspectRes, packageManager, targetFile) {
+    // convert all results from the same plugin to MultiProjectResultCustom
+    // and annotate each scannedProject with packageManager
+    return {
+        plugin: inspectRes.plugin,
+        scannedProjects: convert_scanned_projects_to_custom_1.convertScannedProjectsToCustom(inspectRes.scannedProjects, inspectRes.plugin, inspectRes.plugin.packageManager ||
+            packageManager, targetFile),
+    };
+}
+exports.convertMultiResultToMultiCustom = convertMultiResultToMultiCustom;
+//# sourceMappingURL=convert-multi-plugin-res-to-multi-custom.js.map
