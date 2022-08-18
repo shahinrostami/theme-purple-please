@@ -1,4 +1,4 @@
-![Plotapi](https://newsletter.datacrayon.com/uploads/1500x500.jpeg)
+![Plotapi](https://plotapi.com/wp-content/uploads/2021/08/1500x500.jpeg)
 
 # @shahinrostami/theme-purple-please
 
