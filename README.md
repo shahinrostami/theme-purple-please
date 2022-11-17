@@ -1,4 +1,4 @@
-![Plotapi](https://plotapi.com/wp-content/uploads/2021/08/1500x500.jpeg)
+<a href="https://plotapi.com" target="_blank"><img src="https://plotapi.com/wp-content/uploads/2021/08/1500x500.jpeg"></a>
 
 # @shahinrostami/theme-purple-please
 
